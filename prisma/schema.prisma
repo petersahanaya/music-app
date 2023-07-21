@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @unique @default(uuid())
+  username String
+  email    String
+  profile  String
+
+  Album    Music[] @relation("album")
+  Favorite Music[] @relation("favorite")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Music {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  largeImage  String
+  coverImage  String
+  musicUrl    String
+  views       Int    @default(0)
+  lyric       String @db.String
+  genre       String
+
+  favorite   User?   @relation("favorite", fields: [favoriteId], references: [userId])
+  favoriteId String?
+
+  author   User?   @relation("album", fields: [authorId], references: [userId])
+  authorId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
