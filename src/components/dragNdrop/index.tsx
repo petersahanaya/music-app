@@ -7,7 +7,7 @@ import { FormSchema } from "../dropdown/post/form";
 type DragAndDropProps = {
   typeFiles: string[];
   setValue: UseFormSetValue<FormSchema>;
-  formKey: "largeImage" | "coverImage" | "song" | "genre";
+  formKey: "largeImage" | "coverImage" | "song";
   dirty: Partial<
     Readonly<{
       title?: boolean | undefined;
@@ -131,7 +131,7 @@ const DragAndDropFile = ({
 
   return (
     <div
-      className={`w-full h-[120px] border-dotted border-[2px] border-stone-600 ${className}`}
+      className={`w-full h-[120px] border-dotted border-[2px] mb-8 border-stone-600 ${className}`}
     >
       <label
         className={`w-full h-full border-dotted border-red-700  flex justify-center items-center`}

@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -9,43 +9,17 @@ import { PostStep, usePostDropDown } from "@state/store/post";
 import Input from "@component/input";
 import Button from "@component/button";
 import DragAndDropFile from "@component/dragNdrop";
-import { fadeOutRight, fadeUpAnimate } from "@animation/fade";
-import Card from "@component/card";
-import { useState } from "react";
 import Select from "@component/select";
+import Card from "@component/card";
 
-const schema = z.object({
-  title: z.string().min(5).max(30),
-  description: z.string().min(10),
-  lyric: z.string().min(10),
-  genre: z.enum(["pop", "rock", "mood", "hiphop", "chill"]).nullish(),
-  largeImage: z.custom<File>().nullish(),
-  coverImage: z.custom<File>().nullish(),
-  song: z.custom<File>().nullish(),
-});
+import { fadeOutRight, fadeUpAnimate } from "@animation/fade";
+import { ACCEPTED_GENRE, schema } from "@lib/validation";
+import { useState } from "react";
 
-const selectOptions = [
-  {
-    label: "pop",
-    value: "pop",
-  },
-  {
-    label: "mood",
-    value: "mood",
-  },
-  {
-    label: "rock",
-    value: "rock",
-  },
-  {
-    label: "hiphop",
-    value: "hiphop",
-  },
-  {
-    label: "chill",
-    value: "chill",
-  },
-];
+const selectOptions = ACCEPTED_GENRE.map((genre) => ({
+  label: genre,
+  value: genre,
+}));
 
 export type OptionsKey = typeof selectOptions;
 
@@ -86,7 +60,9 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
     (state) => state.onPressedOpenPost
   );
 
-  const onSave = async (data: FormSchema) => {
+  const onSave = async (result: any) => {
+    const data = result as FormSchema;
+
     if (step === PostStep.SECOND) {
       setState((prev) => ({ ...prev, loading: true }));
 
@@ -115,6 +91,8 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
 
         return setTimeout(() => {
           setState({ error: "", loading: false, success: false });
+
+          onPressedTogglePostDropDown();
         }, 1500);
       }
 
@@ -144,33 +122,35 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
             key={step}
             variants={fadeOutRight}
             exit="exit"
-            className="w-full flex flex-col justify-start items-end gap-12 "
+            className="w-full flex flex-col justify-start items-end gap-2"
           >
             <Input
               dirty={dirtyFields}
               error={errors.title?.message || ""}
               hint="Convetty Boom"
               label="title"
-              register={register}
+              register={register as unknown as UseFormRegister<FormSchema>}
             />
             <Input
               dirty={dirtyFields}
               error={errors.description?.message || ""}
               hint="Sweet and Charm songs"
               label="description"
-              register={register}
+              register={register as unknown as UseFormRegister<FormSchema>}
             />
             <Input
               dirty={dirtyFields}
               error={errors.lyric?.message || ""}
               hint="in the middle of night.."
               label="lyric"
-              register={register}
+              register={register as unknown as UseFormRegister<FormSchema>}
             />
-            {/* @ts-expect-error */}
-            <Select listOfOption={selectOptions} setValue={setValue} />
+            <Select
+              listOfOption={selectOptions}
+              setValue={setValue as unknown as UseFormSetValue<FormSchema>}
+            />
             <DragAndDropFile
-              setValue={setValue}
+              setValue={setValue as unknown as UseFormSetValue<FormSchema>}
               dirty={dirtyFields}
               formKey="largeImage"
               typeFiles={["JPG", "PNG", "JPEG"]}
@@ -182,7 +162,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
             </DragAndDropFile>
             <DragAndDropFile
               className="mt-[-2rem]"
-              setValue={setValue}
+              setValue={setValue as unknown as UseFormSetValue<FormSchema>}
               dirty={dirtyFields}
               formKey="coverImage"
               typeFiles={["JPG", "PNG", "JPEG"]}
@@ -194,7 +174,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
             </DragAndDropFile>
             <DragAndDropFile
               className="mt-[-2rem]"
-              setValue={setValue}
+              setValue={setValue as unknown as UseFormSetValue<FormSchema>}
               dirty={dirtyFields}
               formKey="song"
               typeFiles={["MPEG"]}
@@ -208,7 +188,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
         )}
       </AnimatePresence>
 
-      {step === PostStep.SECOND && <Card props={watch()} />}
+      {step === PostStep.SECOND && <Card props={watch() as FormSchema} />}
 
       <div
         className={`w-full flex items-center ${
@@ -226,6 +206,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
               back
             </Button>
             <Button
+              disabled={state.loading}
               loader={state.loading}
               type="submit"
               className="w-[150px] text-center"
@@ -237,7 +218,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
         )}
         {step === PostStep.INITIAL && (
           <Button
-            className="w-[150px] text-center"
+            className="w-full text-center uppercase"
             onClick={() => {
               if (
                 dirtyFields.description &&

@@ -1,17 +1,21 @@
 import { prisma } from "@lib/db";
-import { FormSchema } from "@component/dropdown/post/form";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryUploadFile } from "@lib/functions/converter";
 import { getServerSession } from "next-auth";
 import { OPTIONS } from "@auth/route";
+import { z } from "zod";
+import { schema } from "@lib/validation";
 
 export const runtime = "nodejs";
+
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
+type TypeFormBody = z.infer<typeof schema>;
 
 type CloudinaryResponse = {
   secure_url: string;
@@ -35,7 +39,16 @@ export async function POST(req: Request) {
 
   try {
     const formData = await req.formData();
-    const body = Object.fromEntries(formData) as FormSchema;
+    const body = Object.fromEntries(formData) as TypeFormBody;
+
+    const validation = schema.safeParse(body);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        { message: validation.error.message },
+        { status: 400 }
+      );
+    }
 
     const largeImage = CloudinaryUploadFile(
       body.largeImage!
