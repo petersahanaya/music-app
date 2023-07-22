@@ -13,6 +13,7 @@ import { fadeOutRight, fadeUpAnimate } from "@animation/fade";
 import Card from "@component/card";
 import { useState } from "react";
 import Select from "@component/select";
+import Alert from "@component/alert/validate";
 
 const schema = z.object({
   title: z.string().min(5).max(30),
@@ -115,7 +116,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
 
         return setTimeout(() => {
           setState({ error: "", loading: false, success: false });
-        }, 1500);
+        }, 5000);
       }
 
       const result = await resp.json();
@@ -127,136 +128,143 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
   };
 
   return (
-    <motion.form
-      style={{
-        width: "100%",
-      }}
-      variants={fadeUpAnimate}
-      className={`w-full flex flex-col justify-start ${
-        step === PostStep.INITIAL ? "items-end" : "items-center"
-      } items-end gap-12`}
-      method="POST"
-      onSubmit={handleSubmit(onSave)}
-    >
-      <AnimatePresence>
-        {step === PostStep.INITIAL && (
-          <motion.section
-            key={step}
-            variants={fadeOutRight}
-            exit="exit"
-            className="w-full flex flex-col justify-start items-end gap-12 "
-          >
-            <Input
-              dirty={dirtyFields}
-              error={errors.title?.message || ""}
-              hint="Convetty Boom"
-              label="title"
-              register={register}
-            />
-            <Input
-              dirty={dirtyFields}
-              error={errors.description?.message || ""}
-              hint="Sweet and Charm songs"
-              label="description"
-              register={register}
-            />
-            <Input
-              dirty={dirtyFields}
-              error={errors.lyric?.message || ""}
-              hint="in the middle of night.."
-              label="lyric"
-              register={register}
-            />
-            {/* @ts-expect-error */}
-            <Select listOfOption={selectOptions} setValue={setValue} />
-            <DragAndDropFile
-              setValue={setValue}
-              dirty={dirtyFields}
-              formKey="largeImage"
-              typeFiles={["JPG", "PNG", "JPEG"]}
-              accept="image/*"
-            >
-              <div className="text-lg uppercase text-stone-600 font-[500] text-center">
-                <p>Drag your background image here 😄</p>
-              </div>
-            </DragAndDropFile>
-            <DragAndDropFile
-              className="mt-[-2rem]"
-              setValue={setValue}
-              dirty={dirtyFields}
-              formKey="coverImage"
-              typeFiles={["JPG", "PNG", "JPEG"]}
-              accept="image/*"
-            >
-              <div className="text-lg uppercase text-stone-600 font-[500] text-center">
-                <p>Drag your cover image here 📔</p>
-              </div>
-            </DragAndDropFile>
-            <DragAndDropFile
-              className="mt-[-2rem]"
-              setValue={setValue}
-              dirty={dirtyFields}
-              formKey="song"
-              typeFiles={["MPEG"]}
-              accept="audio/*"
-            >
-              <div className="text-lg uppercase text-stone-600 font-[500] text-center">
-                <p>Drag your song here 🎵</p>
-              </div>
-            </DragAndDropFile>
-          </motion.section>
-        )}
-      </AnimatePresence>
-
-      {step === PostStep.SECOND && <Card props={watch()} />}
-
-      <div
-        className={`w-full flex items-center ${
-          step === PostStep.SECOND ? "justify-around" : "justify-end"
-        }`}
+    <>
+      {!state.error && (
+        <Alert open={state.error ? true : false} type="error">
+          {state.error}
+        </Alert>
+      )}
+      <motion.form
+        style={{
+          width: "100%",
+        }}
+        variants={fadeUpAnimate}
+        className={`w-full flex flex-col justify-start ${
+          step === PostStep.INITIAL ? "items-end" : "items-center"
+        } items-end gap-12`}
+        method="POST"
+        onSubmit={handleSubmit(onSave)}
       >
-        {step === PostStep.SECOND && (
-          <>
+        <AnimatePresence>
+          {step === PostStep.INITIAL && (
+            <motion.section
+              key={step}
+              variants={fadeOutRight}
+              exit="exit"
+              className="w-full flex flex-col justify-start items-end gap-12 "
+            >
+              <Input
+                dirty={dirtyFields}
+                error={errors.title?.message || ""}
+                hint="Convetty Boom"
+                label="title"
+                register={register}
+              />
+              <Input
+                dirty={dirtyFields}
+                error={errors.description?.message || ""}
+                hint="Sweet and Charm songs"
+                label="description"
+                register={register}
+              />
+              <Input
+                dirty={dirtyFields}
+                error={errors.lyric?.message || ""}
+                hint="in the middle of night.."
+                label="lyric"
+                register={register}
+              />
+              {/* @ts-expect-error */}
+              <Select listOfOption={selectOptions} setValue={setValue} />
+              <DragAndDropFile
+                setValue={setValue}
+                dirty={dirtyFields}
+                formKey="largeImage"
+                typeFiles={["JPG", "PNG", "JPEG"]}
+                accept="image/*"
+              >
+                <div className="text-lg uppercase text-stone-600 font-[500] text-center">
+                  <p>Drag your background image here 😄</p>
+                </div>
+              </DragAndDropFile>
+              <DragAndDropFile
+                className="mt-[-2rem]"
+                setValue={setValue}
+                dirty={dirtyFields}
+                formKey="coverImage"
+                typeFiles={["JPG", "PNG", "JPEG"]}
+                accept="image/*"
+              >
+                <div className="text-lg uppercase text-stone-600 font-[500] text-center">
+                  <p>Drag your cover image here 📔</p>
+                </div>
+              </DragAndDropFile>
+              <DragAndDropFile
+                className="mt-[-2rem]"
+                setValue={setValue}
+                dirty={dirtyFields}
+                formKey="song"
+                typeFiles={["MPEG"]}
+                accept="audio/*"
+              >
+                <div className="text-lg uppercase text-stone-600 font-[500] text-center">
+                  <p>Drag your song here 🎵</p>
+                </div>
+              </DragAndDropFile>
+            </motion.section>
+          )}
+        </AnimatePresence>
+
+        {step === PostStep.SECOND && <Card props={watch()} />}
+
+        <div
+          className={`w-full flex items-center ${
+            step === PostStep.SECOND ? "justify-around" : "justify-end"
+          }`}
+        >
+          {step === PostStep.SECOND && (
+            <>
+              <Button
+                className="w-[150px] text-center"
+                onClick={() => {
+                  onPressedChangeStep(PostStep.INITIAL);
+                }}
+              >
+                back
+              </Button>
+              <Button
+                loader={state.loading}
+                type="submit"
+                className="w-[150px] text-center"
+                onClick={() => {}}
+              >
+                submit
+              </Button>
+            </>
+          )}
+          {step === PostStep.INITIAL && (
             <Button
               className="w-[150px] text-center"
               onClick={() => {
-                onPressedChangeStep(PostStep.INITIAL);
+                if (
+                  dirtyFields.description &&
+                  dirtyFields.title &&
+                  dirtyFields.lyric
+                ) {
+                  onPressedChangeStep(PostStep.SECOND);
+                } else {
+                  setError("description", { message: "required" });
+                  setError("title", { message: "required" });
+                  setError("lyric", { message: "required" });
+                }
               }}
             >
-              back
+              next
             </Button>
-            <Button
-              loader={state.loading}
-              type="submit"
-              className="w-[150px] text-center"
-              onClick={() => {}}
-            >
-              submit
-            </Button>
-          </>
-        )}
-        {step === PostStep.INITIAL && (
-          <Button
-            className="w-[150px] text-center"
-            onClick={() => {
-              if (
-                dirtyFields.description &&
-                dirtyFields.title &&
-                dirtyFields.lyric
-              ) {
-                onPressedChangeStep(PostStep.SECOND);
-              } else {
-                setError("description", { message: "required" });
-                setError("title", { message: "required" });
-                setError("lyric", { message: "required" });
-              }
-            }}
-          >
-            next
-          </Button>
-        )}
-      </div>
-    </motion.form>
+          )}
+        </div>
+      </motion.form>
+    </>
   );
 };
 
