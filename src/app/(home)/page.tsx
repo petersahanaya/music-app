@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 
 const getMusic = async () => {
   try {
-    const resp = await fetch("http://localhost:3000/api/music", {
+    const resp = await fetch("http://localhost:3000/api/song", {
       method: "GET",
       cache: "no-store",
     });
