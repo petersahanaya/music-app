@@ -1,17 +1,21 @@
 import { prisma } from "@lib/db";
-import { FormSchema } from "@component/dropdown/post/form";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryUploadFile } from "@lib/functions/converter";
 import { getServerSession } from "next-auth";
 import { OPTIONS } from "@auth/route";
+import { z } from "zod";
+import { schema } from "@lib/validation";
 
 export const runtime = "nodejs";
+
 export const config = {
   api: {
     bodyParser: false,
   },
 };
+
+type TypeFormBody = z.infer<typeof schema>;
 
 type CloudinaryResponse = {
   secure_url: string;
@@ -29,13 +33,22 @@ export async function POST(req: Request) {
 
   if (!session || !session.user)
     return NextResponse.json(
-      { message: "unauthenticated user" },
+      { message: "UnAuthorized User." },
       { status: 403 }
     );
 
   try {
     const formData = await req.formData();
-    const body = Object.fromEntries(formData) as FormSchema;
+    const body = Object.fromEntries(formData) as TypeFormBody;
+
+    const validation = schema.safeParse(body);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        { message: validation.error.message },
+        { status: 400 }
+      );
+    }
 
     const largeImage = CloudinaryUploadFile(
       body.largeImage!
@@ -72,21 +85,10 @@ export async function POST(req: Request) {
       status: 201,
     });
   } catch (e) {
-    console.log("ERROR", e);
+    if (e instanceof Error) {
+      return NextResponse.json({ message: e.message }, { status: 400 });
+    }
 
     return NextResponse.json({ message: e }, { status: 500 });
-  }
-}
-
-export async function GET(req: Request) {
-  const url = req.url;
-
-  const searchParams = new URLSearchParams(url);
-
-  const isAlbum = searchParams.has("album");
-
-  const isGenre = searchParams.has("genre");
-
-  if (!isAlbum && !isGenre) {
   }
 }

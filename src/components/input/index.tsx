@@ -34,17 +34,15 @@ const Input = ({
   return (
     <div
       className={twMerge(
-        `w-full h-max relative ${
-          focus || value || dirty[label] ? "" : ""
-        }  transition-all`
+        `w-full h-max flex flex-col justify-start items-start gap-2 transition-all`
       )}
     >
       <input
         onFocus={() => setFocus(true)}
         className={twMerge(
-          `w-full p-2 rounded-md text-sm bg-stone-400 text-white absolute left-0 top-0 ${className} pl-5 border-[2px] border-transparent outline-stone-700 placeholder:text-stone-200 placeholder:uppercase ${
+          `w-full p-2 rounded-md text-sm bg-stone-400 text-white pl-5 border-[2px] border-transparent outline-stone-700 placeholder:text-stone-200 placeholder:uppercase ${
             error ? "outline-red border-red-400" : ""
-          }`
+          } ${className}`
         )}
         placeholder={label}
         {...register(label, {
@@ -56,6 +54,8 @@ const Input = ({
           },
         })}
       />
+
+      {error && <p className="text-xs uppercase text-stone-400">{error}</p>}
       {/* <p
         className={`absolute top-[10px] left-[5%] text-stone-200 text-xs ${
           value || focus || dirty[label]

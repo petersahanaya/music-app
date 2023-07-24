@@ -1,18 +1,31 @@
 "use client";
 
-import { usePostDropDown } from "@state/store/post";
+import { useError, usePostDropDown } from "@state/store/post";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
 import Form from "./form";
 import { AnimatePresence, motion } from "framer-motion";
 import { popUpAnimate } from "@animation/popup";
 import { fadeUpAnimate } from "@animation/fade";
+import Alert from "@component/alert/validate";
 
 const PostDropDown = () => {
   const postDropDownState = usePostDropDown();
+  const { error, success } = useError((state) => state.state);
 
   return (
     <>
+      {error && (
+        <Alert className="bg-red-400" open={error ? true : false}>
+          {error}
+        </Alert>
+      )}
+
+      {success && (
+        <Alert className="bg-green-400" open={success}>
+          Uploaded !
+        </Alert>
+      )}
       <AnimatePresence>
         {postDropDownState.open && (
           <motion.nav
@@ -24,7 +37,7 @@ const PostDropDown = () => {
               translateX: "-50%",
               translateY: "-50%",
             }}
-            className="fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] p-[25px] bg-white shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none pb-8"
+            className="fixed top-[50%] left-[50%] max-h-[85vh] overflow-y-auto w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] p-[25px] bg-white shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none pb-8"
           >
             <article>
               <header className="flex justify-between items-center ">

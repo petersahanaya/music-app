@@ -7,9 +7,11 @@ import { UseFormSetValue } from "react-hook-form";
 import { popUpAnimate } from "@animation/popup";
 import { FormSchema } from "../dropdown/post/form";
 
+type GenreEnum = FormSchema['genre']
+
 type Options = {
-  label: FormSchema["genre"];
-  value: FormSchema["genre"];
+  label: string;
+  value: string;
 };
 
 type SelectProps = {
@@ -61,7 +63,7 @@ function Select({ setValue, listOfOption }: SelectProps) {
       }
 
       if (e.key === "Enter" && open) {
-        setValue("genre", listOfOption[selected!].value);
+        setValue("genre", listOfOption[selected!].value as GenreEnum);
 
         setOpen(false);
       }
@@ -111,7 +113,7 @@ function Select({ setValue, listOfOption }: SelectProps) {
               <motion.div
                 onClick={() => {
                   setSelected(idx);
-                  setValue("genre", listOfOption[idx].value);
+                  setValue("genre", listOfOption[idx].value as GenreEnum);
                   setOpen(false);
                 }}
                 key={idx}

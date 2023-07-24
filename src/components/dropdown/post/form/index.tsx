@@ -1,52 +1,29 @@
 "use client";
 
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import {
+  FieldErrors,
+  UseFormRegister,
+  UseFormSetValue,
+  useForm,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { PostStep, usePostDropDown } from "@state/store/post";
+import { PostStep, useError, usePostDropDown } from "@state/store/post";
 import Input from "@component/input";
 import Button from "@component/button";
 import DragAndDropFile from "@component/dragNdrop";
-import { fadeOutRight, fadeUpAnimate } from "@animation/fade";
-import Card from "@component/card";
-import { useState } from "react";
 import Select from "@component/select";
-import Alert from "@component/alert/validate";
+import Card from "@component/card";
 
-const schema = z.object({
-  title: z.string().min(5).max(30),
-  description: z.string().min(10),
-  lyric: z.string().min(10),
-  genre: z.enum(["pop", "rock", "mood", "hiphop", "chill"]).nullish(),
-  largeImage: z.custom<File>().nullish(),
-  coverImage: z.custom<File>().nullish(),
-  song: z.custom<File>().nullish(),
-});
+import { fadeOutRight, fadeUpAnimate } from "@animation/fade";
+import { ACCEPTED_GENRE, schema } from "@lib/validation";
 
-const selectOptions = [
-  {
-    label: "pop",
-    value: "pop",
-  },
-  {
-    label: "mood",
-    value: "mood",
-  },
-  {
-    label: "rock",
-    value: "rock",
-  },
-  {
-    label: "hiphop",
-    value: "hiphop",
-  },
-  {
-    label: "chill",
-    value: "chill",
-  },
-];
+const selectOptions = ACCEPTED_GENRE.map((genre) => ({
+  label: genre,
+  value: genre,
+}));
 
 export type OptionsKey = typeof selectOptions;
 
@@ -57,6 +34,15 @@ type FormProps = {
   step: PostStep;
   onPressedChangeStep: (step: PostStep) => void;
 };
+
+type FieldError = FieldErrors<{
+  title: string;
+  description: string;
+  lyric: string;
+  coverImage: string;
+  largeImage: string;
+  song: string;
+}>;
 
 const Form = ({ step, onPressedChangeStep }: FormProps) => {
   const {
@@ -77,20 +63,19 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
     mode: "onBlur",
   });
 
-  const [state, setState] = useState({
-    error: "",
-    success: false,
-    loading: false,
-  });
+  console.log({ errors });
+
+  const state = useError();
 
   const onPressedTogglePostDropDown = usePostDropDown(
     (state) => state.onPressedOpenPost
   );
 
-  const onSave = async (data: FormSchema) => {
-    if (step === PostStep.SECOND) {
-      setState((prev) => ({ ...prev, loading: true }));
+  const onSave = async (result: any) => {
+    const data = result as FormSchema;
 
+    if (step === PostStep.SECOND) {
+      state.onHandleState({ loading: true });
       const formData = new FormData();
 
       formData.append("title", data.title);
@@ -101,39 +86,44 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
       formData.append("coverImage", data.coverImage!);
       formData.append("song", data.song!);
 
-      const resp = await fetch("http://localhost:3000/api/music", {
-        method: "POST",
-        headers: {},
-        body: formData,
-      });
-
-      if (!resp.ok || resp.status !== 201) {
-        setState({
-          error: "Error when try to post..",
-          loading: true,
-          success: false,
+      try {
+        const resp = await fetch("http://localhost:3000/api/music", {
+          method: "POST",
+          headers: {},
+          body: formData,
         });
 
-        return setTimeout(() => {
-          setState({ error: "", loading: false, success: false });
-        }, 5000);
+        const result = (await resp.json()) as { message: string };
+
+        if (!resp.ok || resp.status !== 201) {
+          state.onHandleState({ error: result.message, loading: false });
+
+          return setTimeout(() => {
+            state.onHandleState({ error: "", loading: false, success: false });
+          }, 3000);
+        }
+
+        state.onHandleState({ success: true, loading: false });
+
+        setTimeout(() => {
+          state.onHandleState({ success: false });
+        }, 3000);
+
+        onPressedTogglePostDropDown();
+      } catch (error) {
+        if (error instanceof Error) {
+          state.onHandleState({ error: error.message, loading: false });
+
+          return setTimeout(() => {
+            state.onHandleState({ error: "" });
+          }, 3000);
+        }
       }
-
-      const result = await resp.json();
-
-      onPressedTogglePostDropDown();
-
-      setState({ error: "", loading: false, success: false });
     }
   };
 
   return (
     <>
-      {!state.error && (
-        <Alert open={state.error ? true : false} type="error">
-          {state.error}
-        </Alert>
-      )}
       <motion.form
         style={{
           width: "100%",
@@ -151,37 +141,40 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
               key={step}
               variants={fadeOutRight}
               exit="exit"
-              className="w-full flex flex-col justify-start items-end gap-12 "
+              className="w-full flex flex-col justify-start items-end gap-2"
             >
               <Input
                 dirty={dirtyFields}
                 error={errors.title?.message || ""}
                 hint="Convetty Boom"
                 label="title"
-                register={register}
+                register={register as unknown as UseFormRegister<FormSchema>}
               />
               <Input
                 dirty={dirtyFields}
                 error={errors.description?.message || ""}
                 hint="Sweet and Charm songs"
                 label="description"
-                register={register}
+                register={register as unknown as UseFormRegister<FormSchema>}
               />
               <Input
                 dirty={dirtyFields}
                 error={errors.lyric?.message || ""}
                 hint="in the middle of night.."
                 label="lyric"
-                register={register}
+                register={register as unknown as UseFormRegister<FormSchema>}
               />
-              {/* @ts-expect-error */}
-              <Select listOfOption={selectOptions} setValue={setValue} />
+              <Select
+                listOfOption={selectOptions}
+                setValue={setValue as unknown as UseFormSetValue<FormSchema>}
+              />
               <DragAndDropFile
-                setValue={setValue}
+                setValue={setValue as unknown as UseFormSetValue<FormSchema>}
                 dirty={dirtyFields}
                 formKey="largeImage"
                 typeFiles={["JPG", "PNG", "JPEG"]}
                 accept="image/*"
+                errorMessage={(errors as FieldError).largeImage?.message}
               >
                 <div className="text-lg uppercase text-stone-600 font-[500] text-center">
                   <p>Drag your background image here 😄</p>
@@ -189,11 +182,12 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
               </DragAndDropFile>
               <DragAndDropFile
                 className="mt-[-2rem]"
-                setValue={setValue}
+                setValue={setValue as unknown as UseFormSetValue<FormSchema>}
                 dirty={dirtyFields}
                 formKey="coverImage"
                 typeFiles={["JPG", "PNG", "JPEG"]}
                 accept="image/*"
+                errorMessage={(errors as FieldError).coverImage?.message}
               >
                 <div className="text-lg uppercase text-stone-600 font-[500] text-center">
                   <p>Drag your cover image here 📔</p>
@@ -201,11 +195,12 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
               </DragAndDropFile>
               <DragAndDropFile
                 className="mt-[-2rem]"
-                setValue={setValue}
+                setValue={setValue as unknown as UseFormSetValue<FormSchema>}
                 dirty={dirtyFields}
                 formKey="song"
                 typeFiles={["MPEG"]}
                 accept="audio/*"
+                errorMessage={(errors as FieldError).song?.message}
               >
                 <div className="text-lg uppercase text-stone-600 font-[500] text-center">
                   <p>Drag your song here 🎵</p>
@@ -215,7 +210,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
           )}
         </AnimatePresence>
 
-        {step === PostStep.SECOND && <Card props={watch()} />}
+        {step === PostStep.SECOND && <Card props={watch() as FormSchema} />}
 
         <div
           className={`w-full flex items-center ${
@@ -233,7 +228,8 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
                 back
               </Button>
               <Button
-                loader={state.loading}
+                disabled={state.state.loading}
+                loader={state.state.loading}
                 type="submit"
                 className="w-[150px] text-center"
                 onClick={() => {}}
@@ -244,7 +240,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
           )}
           {step === PostStep.INITIAL && (
             <Button
-              className="w-[150px] text-center"
+              className="w-full text-center uppercase"
               onClick={() => {
                 if (
                   dirtyFields.description &&
@@ -253,9 +249,11 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
                 ) {
                   onPressedChangeStep(PostStep.SECOND);
                 } else {
-                  setError("description", { message: "required" });
-                  setError("title", { message: "required" });
-                  setError("lyric", { message: "required" });
+                  setError("description", {
+                    message: "description are required.",
+                  });
+                  setError("title", { message: "title are required." });
+                  setError("lyric", { message: "lyric are required." });
                 }
               }}
             >

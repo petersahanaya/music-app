@@ -8,6 +8,7 @@ type ButtonProps = {
   types?: "fill" | "outline";
   type?: "button" | "submit";
   loader?: boolean;
+  disabled?: boolean;
   onClick: () => void;
 } & ReactChild;
 
@@ -17,10 +18,12 @@ const Button = ({
   types = "fill",
   loader = false,
   type = "button",
+  disabled = false,
   onClick,
 }: ButtonProps) => {
   return (
     <button
+      disabled={disabled}
       type={type}
       onClick={onClick}
       className={twMerge(
