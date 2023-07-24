@@ -19,3 +19,24 @@ export const usePostDropDown = create<State>((set) => ({
   onPressedOpenPost: () => set((state) => ({ open: !state.open })),
   onPressedChangeStep: (step: PostStep) => set((state) => ({ step })),
 }));
+
+type ErrorState = {
+  state: {
+    error? : string,
+    loading? : boolean,
+    success? : boolean
+  };
+};
+
+type ErrorAction = {
+  onHandleState : ({error, loading, success} : ErrorState['state']) => void
+}
+
+export const useError = create<ErrorState & ErrorAction>((set) => ({
+  state : {
+    error : "",
+    loading : false,
+    success : false,
+  },
+  onHandleState : (props) => set((state) => ({state : {...state, ...props}}))
+}));

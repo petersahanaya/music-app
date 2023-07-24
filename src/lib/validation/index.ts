@@ -17,9 +17,8 @@ export const schema = z.object({
   description: z
     .string({ description: "description are required." })
     .min(10, { message: "description must contains at least 10 character" }),
-  lyric: z
-    .string({ description: "lyric are required." })
-    .min(10, { message: "lyric must contains at least 10 character" }),
+  lyric: z.string({ description: "lyric are required." }),
+  // .min(10, { message: "lyric must contains at least 10 character" }),
   genre: z
     .enum(["pop", "rock", "mood", "hiphop", "chill"], {
       description: "genre are required",
@@ -31,7 +30,7 @@ export const schema = z.object({
   largeImage: z
     .custom<File>()
     .refine(
-      (file: File) => file?.size <= MAX_IMAGE_FILE_SIZE,
+      (file: File) => file?.size >= MAX_IMAGE_FILE_SIZE,
       "Max image size is 5MB."
     )
     .refine(
@@ -41,7 +40,7 @@ export const schema = z.object({
   coverImage: z
     .custom<File>()
     .refine(
-      (file: File) => file?.size <= MAX_IMAGE_FILE_SIZE,
+      (file: File) => file?.size >= MAX_IMAGE_FILE_SIZE,
       "Max image size is 5MB."
     )
     .refine(
@@ -51,7 +50,7 @@ export const schema = z.object({
   song: z
     .custom<File>()
     .refine(
-      (file: File) => file?.size <= MAX_AUDIO_FILE_SIZE,
+      (file: File) => file?.size >= MAX_AUDIO_FILE_SIZE,
       "Max Audio file size in 10MB"
     )
     .refine(

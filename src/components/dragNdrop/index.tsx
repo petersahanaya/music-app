@@ -20,6 +20,7 @@ type DragAndDropProps = {
     }>
   >;
   accept: "image/*" | "audio/*" | undefined;
+  errorMessage?: string;
 } & ReactClassName;
 
 const DragAndDropFile = ({
@@ -30,6 +31,7 @@ const DragAndDropFile = ({
   dirty,
   setValue,
   accept,
+  errorMessage,
 }: DragAndDropProps) => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -89,8 +91,6 @@ const DragAndDropFile = ({
 
       const file = files[0];
 
-      console.log(file);
-
       const isSupport = typeFiles.some(
         (type) => type.toLowerCase() === file.type.split("/")[1]
       );
@@ -130,30 +130,39 @@ const DragAndDropFile = ({
   }, [handleDrop]);
 
   return (
-    <div
-      className={`w-full h-[120px] border-dotted border-[2px] mb-8 border-stone-600 ${className}`}
-    >
-      <label
-        className={`w-full h-full border-dotted border-red-700  flex justify-center items-center`}
-        ref={containerRef}
-        htmlFor={formKey}
+    <>
+      <div
+        className={`w-full h-[120px] border-dotted border-[2px] mb-8 ${className} ${
+          errorMessage ? "border-red-500" : "border-stone-600"
+        }`}
       >
-        {!success || dirty[formKey] ? (
-          children
-        ) : (
-          <div className="text-xl uppercase text-stone-600 font-[500] text-center">
-            <p>uploaded 😉</p>
-          </div>
-        )}
-      </label>
-      <input
-        onChange={handleChanged}
-        id={formKey}
-        type="file"
-        accept={accept}
-        className="hidden"
-      />
-    </div>
+        <label
+          className={`w-full h-full border-dotted border-red-700  flex justify-center items-center`}
+          ref={containerRef}
+          htmlFor={formKey}
+        >
+          {!success || dirty[formKey] ? (
+            children
+          ) : (
+            <div className="text-xl uppercase text-stone-600 font-[500] text-center">
+              <p>uploaded 😉</p>
+              <p className="text-red-400 mt-2 text-xs uppercase text-center w-full ">
+                {errorMessage}
+              </p>
+            </div>
+          )}
+        </label>
+        <input
+          onChange={handleChanged}
+          id={formKey}
+          type="file"
+          accept={accept}
+          className="hidden"
+        />
+        {/* {errorMessage && ( */}
+        {/* )} */}
+      </div>
+    </>
   );
 };
 

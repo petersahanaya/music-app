@@ -1,18 +1,31 @@
 "use client";
 
-import { usePostDropDown } from "@state/store/post";
+import { useError, usePostDropDown } from "@state/store/post";
 import { BsMusicNoteBeamed } from "react-icons/bs";
 import { GrFormClose } from "react-icons/gr";
 import Form from "./form";
 import { AnimatePresence, motion } from "framer-motion";
 import { popUpAnimate } from "@animation/popup";
 import { fadeUpAnimate } from "@animation/fade";
+import Alert from "@component/alert/validate";
 
 const PostDropDown = () => {
   const postDropDownState = usePostDropDown();
+  const { error, success } = useError((state) => state.state);
 
   return (
     <>
+      {error && (
+        <Alert className="bg-red-400" open={error ? true : false}>
+          {error}
+        </Alert>
+      )}
+
+      {success && (
+        <Alert className="bg-green-400" open={success}>
+          Uploaded !
+        </Alert>
+      )}
       <AnimatePresence>
         {postDropDownState.open && (
           <motion.nav
