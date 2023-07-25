@@ -5,7 +5,6 @@ import { OPTIONS } from "@auth/route";
 
 export async function GET(req: Request) {
   const url = req.url;
-  console.log(url);
 
   const searchParams = new URLSearchParams(url);
   const take = searchParams.get("take");
@@ -117,8 +116,8 @@ export async function GET(req: Request) {
     }
 
     const listOfMusic = await prisma.music.findMany({
-      skip: Number(offset) ?? 0,
-      take: Number(take) ?? 0,
+      skip: Number(offset) || 0,
+      take: Number(take) || 20,
     });
 
     return NextResponse.json({ listOfMusic });

@@ -1,7 +1,9 @@
+import Cards from "@component/list/cards";
+import PreviewCarousel from "@component/carousel/previews";
 import { Music } from "@prisma/client";
 
+export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
 
 const getMusic = async () => {
   try {
@@ -27,11 +29,16 @@ const getMusic = async () => {
 };
 
 const Discover = async () => {
-  const listOfMusic = await getMusic();
+  const { listOfMusic } = await getMusic();
 
   return (
-    <main className="bg-neutral-950 w-full h-full md:mt-60 text-white">
-      {JSON.stringify(listOfMusic)}
+    <main className="bg-neutral-950 w-full h-full md:mt-60  text-white flex justify-start items-center flex-col md:pt-4 pt-8 md:px-0 px-8">
+      <PreviewCarousel
+        className="md:w-[90%] w-full"
+        listOfMusic={listOfMusic.slice(0, 3)}
+      />
+
+      <Cards listOfMusic={listOfMusic} heading="New Release" />
     </main>
   );
 };

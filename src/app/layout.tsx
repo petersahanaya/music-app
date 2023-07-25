@@ -9,6 +9,9 @@ import { getServerSession } from "next-auth";
 import { OPTIONS } from "@auth/route";
 import PostDropDown from "@component/dropdown/post";
 
+export const fetchCache = "force-no-store";
+export const dynamic = "force-dynamic";
+
 const figtree = Figtree({
   subsets: ["latin"],
   fallback: ["sans-serif"],

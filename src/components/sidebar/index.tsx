@@ -16,7 +16,7 @@ const Sidebar = () => {
   const path = usePathname();
 
   return (
-    <aside className="hidden md:inline-block w-[20%] h-full bg-black px-5 pt-[.9rem]">
+    <aside className="hidden md:inline-block w-[20%] h-full bg-black px-5 pt-[.9rem] ">
       <header className="w-full h-[70px] font-[700] text-white text-4xl py-6">
         <h3>P3Music</h3>
       </header>

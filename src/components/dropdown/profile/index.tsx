@@ -28,7 +28,7 @@ const ProfileDropDown = ({ session }: SessionProps) => {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            className="w-[300px]  h-max bg-neutral-200 rounded-md fixed top-[100px] right-[40px] z-30 overflow-hidden flex flex-col justify-center"
+            className="w-[300px]  h-max bg-neutral-200 rounded-md fixed top-[100px] right-[40px] z-[60] overflow-hidden flex flex-col justify-center"
           >
             <motion.section
               variants={fadeUpAnimate}
