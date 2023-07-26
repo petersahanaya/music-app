@@ -40,7 +40,5 @@ export async function CloudinaryUploadFile(file: File) {
       .end(buffer);
   });
 
-  console.log("RESULT", result);
-
   return result;
 }
