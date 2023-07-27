@@ -1,22 +1,23 @@
 "use client";
+
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { formatTime } from "@lib/functions/formater";
+
 import { FaPlay, FaPause } from "react-icons/fa";
 import { FiVolumeX, FiVolume2 } from "react-icons/fi";
 import { MdLoop } from "react-icons/md";
-import { RiSkipLeftFill } from "react-icons/ri";
-import Image from "next/image";
-import { formatTime } from "@/lib/functions/formater";
 import { PiArrowsSplitFill } from "react-icons/pi";
+import { RiSkipLeftFill } from "react-icons/ri";
 
-const audioSrc =
-  "https://res.cloudinary.com/dlvi65trb/video/asset/v1690204069/music/esx9lvgh0rfs2geawwfy.mp3";
+type AudioProps = {
+  title: string;
+  genre: string;
+  musicUrl: string;
+  coverImage: string;
+};
 
-const audioTitle = "Bread";
-const coverImage =
-  "https://res.cloudinary.com/dlvi65trb/image/asset/v1690204067/music/sh0sjtrtinbvu2m8zc45.jpg";
-const audioGenre = "Chill";
-
-const Audio = () => {
+const Audio = ({coverImage, genre, musicUrl, title} : AudioProps) => {
   const [state, setState] = useState({
     play: false,
     volume: 1,
@@ -27,8 +28,6 @@ const Audio = () => {
     currentTime: 0,
     duration: 0,
   });
-
-  const [currentTrack, setCurrentTrack] = useState(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -45,7 +44,7 @@ const Audio = () => {
   const onPressedPlayAudio = useCallback(() => {
     if (!state.play) {
       audioRef.current?.play();
-      setState((prev) => ({ ...state, play: true }));
+      setState((prev) => ({ ...prev, play: true }));
     } else {
       audioRef.current?.pause();
       setState((prev) => ({ ...prev, play: false }));
@@ -90,6 +89,14 @@ const Audio = () => {
     }
   }, []);
 
+  const onPressedChangeVolume = useCallback(() => {
+    if (audioRef.current) {
+      const newVolume = state.volume > 0 ? 0 : 1;
+      audioRef.current.volume = newVolume;
+      setState((prev) => ({ ...prev, volume: newVolume }));
+    }
+  }, [state.volume]);
+
   useEffect(() => {
     const audio = audioRef.current;
     window.addEventListener("keydown", (e) => {
@@ -112,17 +119,17 @@ const Audio = () => {
   return (
     <main className="w-[80%] h-screen bg-neutral-950 pt-52 ">
       <section className="w-screen h-[120px] fixed bottom-0 right-0 bg-black flex justify-between items-center gap-20 z-[80] px-6">
-        <audio autoPlay className="hidden" ref={audioRef} src={audioSrc} />
+        <audio autoPlay className="hidden" ref={audioRef} src={musicUrl} />
         {/* IMAGE */}
         <section className="cursor-pointer group flex justify-start items-center gap-3">
           <div className="sm:w-[80px] sm:h-[80px] w-[50px] h-[50px] rounded-md relative overflow-hidden">
-            <Image src={coverImage} alt={audioTitle} fill />
+            <Image src={coverImage} alt={title} fill />
           </div>
           <div className="group-hover:opacity-70 transition-opacity">
             <p className="text-lg font-[500] text-white capitalize">
-              {audioTitle}
+              {title}
             </p>
-            <p className="text-sm font-[500] text-stone-400">{audioGenre}</p>
+            <p className="text-sm font-[500] text-stone-400">{genre}</p>
           </div>
         </section>
         <section className="flex flex-auto flex-col justify-between items-center pb-8">
@@ -173,11 +180,16 @@ const Audio = () => {
 
         {/* VOLUME */}
         <section className="hidden sm:inline-block relative gap-3 group ">
-          <button className="bg-green-500 text-stone-800 rounded-full p-3 hover:opacity-70 transition-opacity">
-            {state.volume === 0 ? (
-              <FiVolumeX size={20} />
-            ) : (
+          <button
+            onClick={onPressedChangeVolume}
+            className={`bg-green-500 text-stone-800 rounded-full p-3 hover:opacity-70 transition-opacity ${
+              state.volume > 0 ? "opacity-100" : "opacity-50"
+            } transition-opacity`}
+          >
+            {state.volume > 0 ? (
               <FiVolume2 size={20} />
+            ) : (
+              <FiVolumeX size={20} />
             )}
           </button>
 
@@ -187,6 +199,7 @@ const Audio = () => {
               type="range"
               onChange={onDragChangeVolume}
               min={0}
+              value={state.volume}
               max={1}
             />
           </div>

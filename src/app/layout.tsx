@@ -1,13 +1,16 @@
+import { getServerSession } from "next-auth";
+import { Figtree } from "next/font/google";
+import { OPTIONS } from "@auth/route";
+import "./globals.css";
+
 import Sidebar from "@component/sidebar";
 import Header from "@component/header";
 import SessionProvider from "@component/sessionProvider";
 import AlertJoin from "@component/alert/join";
-import { Figtree } from "next/font/google";
-import "./globals.css";
 import ProfileDropDown from "@component/dropdown/profile";
-import { getServerSession } from "next-auth";
-import { OPTIONS } from "@auth/route";
 import PostDropDown from "@component/dropdown/post";
+import AudioProvider from "@component/audioPlayer/audioProvider";
+import AlertUnAuthenticated from "@/components/alert/unauthenticate";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
@@ -29,6 +32,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={figtree.className}>
         <SessionProvider>
+          <AlertUnAuthenticated />
           <main className="w-screen h-screen flex flex-col md:flex-row items-center">
             <Sidebar />
             <Header />
@@ -36,6 +40,7 @@ export default async function RootLayout({
             <AlertJoin session={session!} />
             <ProfileDropDown session={session!} />
             <PostDropDown />
+            <AudioProvider />
           </main>
         </SessionProvider>
       </body>

@@ -42,10 +42,10 @@ const Path = ({ session }: PathProps) => {
         {!session && (
           <div className="flex justify-start items-center gap-4 md:hidden">
             <Button
-              className="w-[120px] text-center p-3"
+              className="w-[120px] text-center p-3 bg-green-500 text-black font-[600]"
               onClick={() => onPressedToggleAuth()}
             >
-              <p className="uppercase text-sm text-stone-100">Sign in</p>
+              <p className="uppercase text-sm">Sign in</p>
             </Button>
             <Button
               className="w-[120px] text-center p-3"
@@ -73,10 +73,10 @@ const Path = ({ session }: PathProps) => {
             </button>
             <section className="md:flex justify-start items-center gap-3 hidden">
               <Button
-                className="w-[120px] text-center"
+                className="w-[120px] text-center bg-green-500 text-black font-[600]"
                 onClick={() => onPressedToggleAuth()}
               >
-                <p className="uppercase text-sm text-stone-100">Sign in</p>
+                <p className="uppercase text-sm ">Sign in</p>
               </Button>
               <Button
                 className="w-[120px] text-center"

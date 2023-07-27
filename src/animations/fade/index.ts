@@ -1,3 +1,5 @@
+import { easeIn } from "framer-motion";
+
 const easings = [0.6, -0.05, 0.01, 0.99];
 
 export const fadeUpAnimate = {
@@ -41,6 +43,19 @@ export const fadeOutRight = {
     transition: {
       duration: 0.3,
       ease: easings,
+    },
+  },
+};
+
+export const fadeInAnimate = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.3,
+      ease: easeIn,
     },
   },
 };
