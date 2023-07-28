@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useAudio } from "@state/store/audio";
 import { useAlertUnAuthenticate } from "@state/store/alert";
 import { useSession } from "next-auth/react";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 type CardProps = {
   music: Music;
@@ -17,6 +17,8 @@ const Card = ({ music, className }: CardProps) => {
   const onPressedChangeAudioSrc = useAudio(
     (state) => state.onPressedChangedAudioSrc
   );
+
+  const track = useAudio((state) => state.track);
 
   const onPressedAlertUnAuthenticate = useAlertUnAuthenticate(
     (state) => state.onPressedChangeAlertUnauthenticate
@@ -36,7 +38,7 @@ const Card = ({ music, className }: CardProps) => {
     <>
       <article
         className={twMerge(
-          `w-[200px] cursor-pointer h-[300px] group ${className}`
+          `w-[200px] cursor-pointer h-[300px] bg-neutral-900 hover:bg-white/20 transition-colors rounded-md p-2 group ${className}`
         )}
       >
         <div className="w-full h-[70%] relative overflow-hidden rounded-md">
@@ -48,9 +50,15 @@ const Card = ({ music, className }: CardProps) => {
           />
           <div
             onClick={onPressedSetAudio}
-            className="absolute bottom-[10px] right-[10px] w-max opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 h-max p-4 rounded-full bg-green-500 hover:bg-green-600 text-stone-950 transition-all"
+            className={`absolute bottom-[10px] right-[10px] w-max opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 h-max p-4 rounded-full bg-stone-100 hover:bg-stone-300 ${
+              track.audioSrc === music.musicUrl && "translate-y-0 opacity-100"
+            } text-stone-950 transition-all`}
           >
-            <FaPlay size={25} />
+            {track.audioSrc === music.musicUrl ? (
+              <FaPause size={25} />
+            ) : (
+              <FaPlay size={25} />
+            )}
           </div>
         </div>
 

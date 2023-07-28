@@ -32,13 +32,17 @@ const Discover = async () => {
   const { listOfMusic } = await getMusic();
 
   return (
-    <main className="bg-neutral-950 w-full h-full md:mt-60  text-white flex justify-start items-center flex-col md:pt-4 pt-8 md:px-0 px-8">
-      <PreviewCarousel
+    <main className="bg-neutral-950 w-full h-full md:mt-60  text-white flex justify-start items-center flex-col md:pt-4 pt-8 md:px-0 px-0">
+      {/* <PreviewCarousel
         className="md:w-[90%] w-full"
         listOfMusic={listOfMusic.slice(0, 3)}
-      />
+      /> */}
 
-      <Cards listOfMusic={listOfMusic} heading="New Release" />
+      <Cards
+        listOfMusic={listOfMusic}
+        heading="New Release"
+        className="pt-24 sm:pt-0"
+      />
     </main>
   );
 };

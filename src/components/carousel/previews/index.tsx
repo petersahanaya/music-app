@@ -62,12 +62,12 @@ const PreviewCarousel = ({ listOfMusic, className }: PreviewProps) => {
             />
             <div className="absolute top-0 left-0 z-40 w-full h-full rounded-sm bg-gradient-to-t from-stone-800/60 to-transparent"></div>
 
-            {/* <div className="absolute p-4 md:top-[50%] top-[65%] left-0 z-40 w-full h-full rounded-sm">
+            <div className="absolute p-4 md:top-[50%] top-[65%] left-0 z-40 w-full h-full rounded-sm">
               <h4 className="text-3xl font-[700]">{music.title}</h4>
               <p className="line-clamp-2 overflow-hidden text-ellipsis w-[80%]">
                 {music.description}
               </p>
-            </div> */}
+            </div>
           </motion.div>
         ))}
       </section>

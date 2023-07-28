@@ -7,8 +7,10 @@ import { formatTime } from "@lib/functions/formater";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { FiVolumeX, FiVolume2 } from "react-icons/fi";
 import { MdLoop } from "react-icons/md";
-import { PiArrowsSplitFill } from "react-icons/pi";
+import { BsShuffle } from "react-icons/bs";
 import { RiSkipLeftFill } from "react-icons/ri";
+import Tooltip from "../tooltip";
+import { useAudio } from "@state/store/audio";
 
 type AudioProps = {
   title: string;
@@ -18,6 +20,8 @@ type AudioProps = {
 };
 
 const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
+  const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
+
   const [state, setState] = useState({
     play: true,
     volume: 1,
@@ -49,7 +53,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
       audioRef.current?.pause();
       setState((prev) => ({ ...prev, play: false }));
     }
-  }, [state]);
+  }, [state.play]);
 
   const handleTimeUpdate = useCallback((audio: HTMLAudioElement) => {
     setTime({
@@ -119,7 +123,12 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
   return (
     <>
       <section className="w-screen h-[120px] fixed bottom-0 right-0 bg-black flex justify-between items-center gap-20 z-[80] px-6">
-        <audio autoPlay className="hidden" ref={audioRef} src={musicUrl} />
+        <audio
+          autoPlay={state.play}
+          className="hidden"
+          ref={audioRef}
+          src={musicUrl}
+        />
         {/* IMAGE */}
         <section className="cursor-pointer group flex justify-start items-center gap-3">
           <div className="sm:w-[80px] sm:h-[80px] w-[50px] h-[50px] rounded-md relative overflow-hidden">
@@ -133,51 +142,64 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
         <section className="flex flex-auto flex-col justify-between items-center pb-8">
           {/* PLAYER */}
           <section className="w-full flex justify-center items-center gap-3 my-6">
-            <button className="text-white rotate-[-90deg] transition-opacity hover:opacity-70">
-              <PiArrowsSplitFill size={20} />
+            <button className="text-white group relative transition-opacity ">
+              <BsShuffle size={20} />
+              <Tooltip value="Shuffle" />
             </button>
-            <button className="bg-green-500 text-stone-800 rounded-full p-3 hover:opacity-70 transition-opacity">
+            <button className="bg-stone-200 group relative text-stone-800 rounded-full p-3 transition-opacity">
               <RiSkipLeftFill size={20} />
+
+              <Tooltip value="Previous" />
             </button>
             <button
               onClick={onPressedPlayAudio}
-              className="bg-green-500 text-stone-800 rounded-full p-4 hover:opacity-70 transition-opacity"
+              className="bg-stone-100 group relative text-stone-800 rounded-full p-4 transition-opacity"
             >
               {!state.play ? <FaPlay size={30} /> : <FaPause size={30} />}
+              <Tooltip
+                value={state.play ? "Pause" : "Play"}
+                className="left-[5%]"
+              />
             </button>
-            <button className="bg-green-500 text-stone-800 rounded-full p-3 rotate-180 hover:opacity-70 transition-opacity">
+            <button className="bg-stone-200 group relative text-stone-800 rounded-full p-3 rotate-180 transition-opacity">
               <RiSkipLeftFill size={20} />
+              <Tooltip value="Next" className="top-[70px] rotate-180" />
             </button>
             <button
               onClick={onPressedChangeLoop}
               className={`text-white ${
                 state.loop ? "opacity-100" : "opacity-50"
-              } transition-opacity hover:opacity-70`}
+              } transition-opacity group relative `}
             >
               <MdLoop size={20} />
+
+              <Tooltip value="Loop" className="right-[-30px]" />
             </button>
           </section>
 
           {/* PROGRESS */}
           <nav className="w-full flex flex-col justify-start items-center gap-2">
-            <div className="w-full h-[5px] rounded-full relative group">
+            <div className="w-full h-[8px] rounded-full group flex justify-between items-center gap-3">
+              <p className="text-stone-300 w-[50px] md:w-[80px] text-xs md:text-sm">
+                {formatTime(time.currentTime)}
+              </p>
               <input
                 type="range"
                 min={0}
                 max={time.duration}
                 value={time.currentTime}
                 onChange={onDragHandleAudio}
-                className="w-full absolute top-0 left-0 cursor-pointer accent-stone-700 h-[4px]"
+                className="w-full cursor-pointer accent-stone-700 h-[4px]"
               />
-              <p className="absolute top-[-20px] left-0 text-stone-300 text-sm opacity-0 translate-y-8 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                {formatTime(time.duration - time.currentTime)}
+              <p className="text-stone-400 w-[50px] md:w-[80px] text-xs md:text-sm">
+                {formatTime(time.duration)}
               </p>
             </div>
           </nav>
         </section>
 
         {/* VOLUME */}
-        <section className="hidden sm:inline-block relative gap-3 group ">
+        <section className="hidden relative gap-3 group ">
           <button
             onClick={onPressedChangeVolume}
             className={`bg-green-500 text-stone-800 rounded-full p-3 hover:opacity-70 transition-opacity ${
