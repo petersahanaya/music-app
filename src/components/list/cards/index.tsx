@@ -15,7 +15,7 @@ const Cards = ({ listOfMusic, heading, className }: CardsProps) => {
   return (
     <main
       className={twMerge(
-        `sm:w-[90%] w-full h-[400px] flex flex-col justify-start items-start gap-3 ${className}`
+        `w-full h-full flex flex-col justify-start items-start gap-3 ${className}`
       )}
     >
       <section className="w-full flex justify-between items-center">
@@ -26,7 +26,7 @@ const Cards = ({ listOfMusic, heading, className }: CardsProps) => {
         </Link>
       </section>
 
-      <section className="w-full h-full grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-3 grid-cols-2 grid-rows-2 gap-4">
+      <section className="w-full h-full grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-3 grid-cols-2 grid-rows-3 gap-4">
         {listOfMusic.map((music, idx) => (
           <Card key={idx} music={music} />
         ))}

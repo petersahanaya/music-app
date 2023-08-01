@@ -11,6 +11,8 @@ export async function GET(req: Request) {
   const offset = searchParams.get("offset");
   const search = searchParams.get("q");
 
+  console.log({ take });
+
   const album = searchParams.get("album");
 
   const genre = searchParams.get("genre");

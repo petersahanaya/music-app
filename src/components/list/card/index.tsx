@@ -44,11 +44,15 @@ const Card = ({ music, className }: CardProps) => {
         <div className="w-full h-[70%] relative overflow-hidden rounded-md">
           <Image
             className="object-cover"
-            src={music.coverImage}
+            src={music.largeImage}
             alt={music.title}
             fill
           />
           <div
+            style={{
+              transform:
+                track.audioSrc === music.musicUrl ? "translateY(0px)" : "",
+            }}
             onClick={onPressedSetAudio}
             className={`absolute bottom-[10px] right-[10px] w-max opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 h-max p-4 rounded-full bg-stone-100 hover:bg-stone-300 ${
               track.audioSrc === music.musicUrl && "translate-y-0 opacity-100"

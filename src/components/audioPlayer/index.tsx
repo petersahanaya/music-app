@@ -26,6 +26,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
     play: true,
     volume: 1,
     loop: false,
+    shuffle: true,
   });
 
   const [time, setTime] = useState({
@@ -69,7 +70,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
     }));
   }, []);
 
-  const handleLoop = useCallback(
+  const handleEnded = useCallback(
     (audio: HTMLAudioElement) => {
       if (state.loop) {
         audio.currentTime = 0;
@@ -93,6 +94,10 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
     }
   }, []);
 
+  const onPressedChangeShuffle = useCallback(() => {
+    setState((prev) => ({ ...prev, shuffle: !prev.shuffle }));
+  }, []);
+
   const onPressedChangeVolume = useCallback(() => {
     if (audioRef.current) {
       const newVolume = state.volume > 0 ? 0 : 1;
@@ -111,14 +116,14 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
 
     if (audio) {
       audio.addEventListener("timeupdate", () => handleTimeUpdate(audio));
-      audio.addEventListener("ended", () => handleLoop(audio));
+      audio.addEventListener("ended", () => handleEnded(audio));
 
       return () => {
         audio.removeEventListener("timeupdate", () => handleTimeUpdate(audio));
-        audio.removeEventListener("ended", () => handleLoop(audio));
+        audio.removeEventListener("ended", () => handleEnded(audio));
       };
     }
-  }, [handleLoop, handleTimeUpdate, onPressedPlayAudio, state.loop]);
+  }, [handleEnded, handleTimeUpdate, onPressedPlayAudio, state.loop]);
 
   return (
     <>
@@ -142,7 +147,12 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
         <section className="flex flex-auto flex-col justify-between items-center pb-8">
           {/* PLAYER */}
           <section className="w-full flex justify-center items-center gap-3 my-6">
-            <button className="text-white group relative transition-opacity ">
+            <button
+              onClick={onPressedChangeShuffle}
+              className={`text-white group relative transition-opacity  ${
+                !state.shuffle ? "opacity-50" : ""
+              }`}
+            >
               <BsShuffle size={20} />
               <Tooltip value="Shuffle" />
             </button>
@@ -199,10 +209,10 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
         </section>
 
         {/* VOLUME */}
-        <section className="hidden relative gap-3 group ">
+        <section className="md:inline-block hidden relative gap-3 group ">
           <button
             onClick={onPressedChangeVolume}
-            className={`bg-green-500 text-stone-800 rounded-full p-3 hover:opacity-70 transition-opacity ${
+            className={`bg-stone-200 text-stone-800 rounded-full p-3 hover:opacity-70 transition-opacity ${
               state.volume > 0 ? "opacity-100" : "opacity-50"
             } transition-opacity`}
           >

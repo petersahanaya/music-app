@@ -5,9 +5,13 @@ import { Music } from "@prisma/client";
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
 
-const getMusic = async () => {
+type getMusicParam = {
+  take: number;
+};
+
+const getMusic = async ({ take }: getMusicParam) => {
   try {
-    const resp = await fetch("http://localhost:3000/api/song", {
+    const resp = await fetch(`http://localhost:3000/api/song?take=${take}`, {
       method: "GET",
       cache: "no-store",
     });
@@ -29,20 +33,22 @@ const getMusic = async () => {
 };
 
 const Discover = async () => {
-  const { listOfMusic } = await getMusic();
+  const { listOfMusic } = await getMusic({ take: 9 });
 
   return (
-    <main className="bg-neutral-950 w-full h-full md:mt-60  text-white flex justify-start items-center flex-col md:pt-4 pt-8 md:px-0 px-0">
-      {/* <PreviewCarousel
+    <main className="bg-neutral-950 w-full h-full md:mt-40 text-white flex justify-start items-center flex-col pt-8">
+      <div className="w-full pb-40 px-5 ">
+        {/* <PreviewCarousel
         className="md:w-[90%] w-full"
         listOfMusic={listOfMusic.slice(0, 3)}
       /> */}
 
-      <Cards
-        listOfMusic={listOfMusic}
-        heading="New Release"
-        className="pt-24 sm:pt-0"
-      />
+        <Cards
+          listOfMusic={listOfMusic}
+          heading="New Release"
+          // className="pt-24 sm:pt-0"
+        />
+      </div>
     </main>
   );
 };

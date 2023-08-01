@@ -19,6 +19,7 @@ import Card from "@component/card";
 
 import { fadeOutRight, fadeUpAnimate } from "@animation/fade";
 import { ACCEPTED_GENRE, schema } from "@lib/validation";
+import { useRouter } from "next/navigation";
 
 const selectOptions = ACCEPTED_GENRE.map((genre) => ({
   label: genre,
@@ -63,13 +64,13 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
     mode: "onBlur",
   });
 
-  console.log({ errors });
-
   const state = useError();
 
   const onPressedTogglePostDropDown = usePostDropDown(
     (state) => state.onPressedOpenPost
   );
+
+  const router = useRouter()
 
   const onSave = async (result: any) => {
     const data = result as FormSchema;
@@ -104,6 +105,7 @@ const Form = ({ step, onPressedChangeStep }: FormProps) => {
         }
 
         state.onHandleState({ success: true, loading: false });
+        router.refresh()
 
         setTimeout(() => {
           state.onHandleState({ success: false });
