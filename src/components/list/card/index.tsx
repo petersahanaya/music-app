@@ -3,22 +3,25 @@
 import { Music } from "@prisma/client";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
-import { useAudio } from "@state/store/audio";
+import { TrackType, useAudio } from "@state/store/audio";
 import { useAlertUnAuthenticate } from "@state/store/alert";
 import { useSession } from "next-auth/react";
 import { FaPlay, FaPause } from "react-icons/fa";
 
 type CardProps = {
   music: Music;
+  listOfMusic: Music[];
   className?: string;
 };
 
-const Card = ({ music, className }: CardProps) => {
+const Card = ({ listOfMusic, music, className }: CardProps) => {
+  const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
+
   const onPressedChangeAudioSrc = useAudio(
     (state) => state.onPressedChangedAudioSrc
   );
 
-  const track = useAudio((state) => state.track);
+  const track = useAudio((state) => state.audioSrc);
 
   const onPressedAlertUnAuthenticate = useAlertUnAuthenticate(
     (state) => state.onPressedChangeAlertUnauthenticate
@@ -31,6 +34,11 @@ const Card = ({ music, className }: CardProps) => {
       onPressedAlertUnAuthenticate(music.coverImage);
     } else {
       onPressedChangeAudioSrc(music);
+      onPressedChangeTrack({
+        currentAudioSrc: music.musicUrl,
+        listOfMusic,
+        type: TrackType.Default,
+      });
     }
   };
 
@@ -51,14 +59,14 @@ const Card = ({ music, className }: CardProps) => {
           <div
             style={{
               transform:
-                track.audioSrc === music.musicUrl ? "translateY(0px)" : "",
+                track?.musicUrl === music.musicUrl ? "translateY(0px)" : "",
             }}
             onClick={onPressedSetAudio}
             className={`absolute bottom-[10px] right-[10px] w-max opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 h-max p-4 rounded-full bg-stone-100 hover:bg-stone-300 ${
-              track.audioSrc === music.musicUrl && "translate-y-0 opacity-100"
+              track?.musicUrl === music.musicUrl && "translate-y-0 opacity-100"
             } text-stone-950 transition-all`}
           >
-            {track.audioSrc === music.musicUrl ? (
+            {track?.musicUrl === music.musicUrl ? (
               <FaPause size={25} />
             ) : (
               <FaPlay size={25} />

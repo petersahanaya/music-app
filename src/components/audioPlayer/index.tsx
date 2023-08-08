@@ -10,7 +10,8 @@ import { MdLoop } from "react-icons/md";
 import { BsShuffle } from "react-icons/bs";
 import { RiSkipLeftFill } from "react-icons/ri";
 import Tooltip from "../tooltip";
-import { useAudio } from "@state/store/audio";
+import { TrackType, useAudio } from "@state/store/audio";
+import { trackingMusic } from "@lib/functions/trackingMusic";
 
 type AudioProps = {
   title: string;
@@ -20,13 +21,11 @@ type AudioProps = {
 };
 
 const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
-  const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
-
   const [state, setState] = useState({
     play: true,
     volume: 1,
     loop: false,
-    shuffle: true,
+    shuffle: false,
   });
 
   const [time, setTime] = useState({
@@ -35,6 +34,41 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
   });
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const listOfMusic = useAudio((state) => state.track.listOfMusic);
+
+  const onPressedChangeAudio = useAudio(
+    (state) => state.onPressedChangedAudioSrc
+  );
+
+  const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
+
+  const onPressedChangeToPrevious = useCallback(() => {
+    const prevMusic = trackingMusic(musicUrl, "previous", listOfMusic);
+
+    if (prevMusic) {
+      onPressedChangeAudio(prevMusic);
+      onPressedChangeTrack({
+        currentAudioSrc: prevMusic.musicUrl,
+        listOfMusic: [],
+        type: TrackType.SetCurrentMusic,
+      });
+    }
+  }, [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeTrack]);
+
+  const onPressedChangeToNext = useCallback(() => {
+    const nextMusic = trackingMusic(musicUrl, "next", listOfMusic);
+
+    if (nextMusic) {
+      onPressedChangeAudio(nextMusic);
+
+      onPressedChangeTrack({
+        currentAudioSrc: nextMusic.musicUrl,
+        listOfMusic: [],
+        type: TrackType.SetCurrentMusic,
+      });
+    }
+  }, [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeTrack]);
 
   const onDragChangeVolume = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const seekValue = parseFloat(e.target.value);
@@ -67,6 +101,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
     setState((prev) => ({
       ...prev,
       loop: !prev.loop,
+      shuffle: !prev.loop ? false : prev.shuffle,
     }));
   }, []);
 
@@ -80,8 +115,31 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
       } else {
         setState((prev) => ({ ...prev, play: false }));
       }
+
+      if (state.shuffle) {
+        const nextMusic = trackingMusic(musicUrl, "next", listOfMusic);
+
+        if (nextMusic) {
+          onPressedChangeAudio(nextMusic);
+
+          onPressedChangeTrack({
+            currentAudioSrc: nextMusic.musicUrl,
+            listOfMusic: [],
+            type: TrackType.SetCurrentMusic,
+          });
+        } else {
+          setState((prev) => ({ ...prev, play: false }));
+        }
+      }
     },
-    [state.loop]
+    [
+      listOfMusic,
+      musicUrl,
+      onPressedChangeAudio,
+      onPressedChangeTrack,
+      state.loop,
+      state.shuffle,
+    ]
   );
 
   const onDragHandleAudio = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +153,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
   }, []);
 
   const onPressedChangeShuffle = useCallback(() => {
-    setState((prev) => ({ ...prev, shuffle: !prev.shuffle }));
+    setState((prev) => ({ ...prev, shuffle: !prev.shuffle, loop : !prev.shuffle ? false : prev.loop }));
   }, []);
 
   const onPressedChangeVolume = useCallback(() => {
@@ -120,7 +178,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
 
       return () => {
         audio.removeEventListener("timeupdate", () => handleTimeUpdate(audio));
-        audio.removeEventListener("ended", () => handleEnded(audio));
+        audio.removeEventListener("ended", () => {});
       };
     }
   }, [handleEnded, handleTimeUpdate, onPressedPlayAudio, state.loop]);
@@ -156,7 +214,14 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
               <BsShuffle size={20} />
               <Tooltip value="Shuffle" />
             </button>
-            <button className="bg-stone-200 group relative text-stone-800 rounded-full p-3 transition-opacity">
+            <button
+              onClick={onPressedChangeToPrevious}
+              className={`bg-stone-200 group relative text-stone-800 rounded-full p-3 transition-opacity ${
+                trackingMusic(musicUrl, "previous", listOfMusic)
+                  ? ""
+                  : "opacity-50"
+              }`}
+            >
               <RiSkipLeftFill size={20} />
 
               <Tooltip value="Previous" />
@@ -171,7 +236,12 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
                 className="left-[5%]"
               />
             </button>
-            <button className="bg-stone-200 group relative text-stone-800 rounded-full p-3 rotate-180 transition-opacity">
+            <button
+              onClick={onPressedChangeToNext}
+              className={`bg-stone-200 group relative text-stone-800 rounded-full p-3 rotate-180 transition-opacity ${
+                trackingMusic(musicUrl, "next", listOfMusic) ? "" : "opacity-50"
+              }`}
+            >
               <RiSkipLeftFill size={20} />
               <Tooltip value="Next" className="top-[70px] rotate-180" />
             </button>

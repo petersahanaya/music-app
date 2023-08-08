@@ -1,22 +1,28 @@
 import { Music } from "@prisma/client";
 import { create } from "zustand";
 
+export enum TrackType {
+  "SetCurrentMusic" = "SETCURRENTMUSIC",
+  "Default" = "DEFAULT",
+}
+
 type Track = {
-  audioSrc?: string;
-  playing?: boolean;
+  currentAudioSrc: string;
+  listOfMusic: Music[];
+  type: TrackType;
 };
 
+export type PickMusic = Pick<
+  Music,
+  "title" | "coverImage" | "musicUrl" | "id" | "genre"
+>;
+
 type State = {
-  audioSrc: Pick<
-    Music,
-    "title" | "coverImage" | "musicUrl" | "id" | "genre"
-  > | null;
-  onPressedChangedAudioSrc: (
-    audioSrc: Pick<Music, "title" | "coverImage" | "musicUrl" | "id" | "genre">
-  ) => void;
+  audioSrc: PickMusic | null;
+  onPressedChangedAudioSrc: (audioSrc: PickMusic) => void;
   track: {
-    audioSrc: string;
-    playing: boolean;
+    currentAudioSrc: string;
+    listOfMusic: Music[];
   };
   onPressedChangeTrack: (props: Track) => void;
 };
@@ -24,17 +30,21 @@ type State = {
 export const useAudio = create<State>((set) => ({
   audioSrc: null,
   track: {
-    audioSrc: "",
-    playing: true,
+    currentAudioSrc: "",
+    listOfMusic: [],
   },
-  onPressedChangeTrack: ({ audioSrc, playing }: Track) =>
+  onPressedChangeTrack: (track: Track) =>
     set((state) => {
-      if (audioSrc) {
-        return { ...state, track: { ...state.track, audioSrc } };
-      } else if (playing) {
-        return { ...state, track: { ...state.track, playing } };
-      } else {
-        return { ...state };
+      switch (track.type) {
+        case TrackType.SetCurrentMusic:
+          return {
+            ...state,
+            track: { ...state.track, currentAudioSrc: track.currentAudioSrc },
+          };
+        case TrackType.Default:
+          return { ...state, track };
+        default:
+          return { ...state };
       }
     }),
   onPressedChangedAudioSrc: (
@@ -42,7 +52,6 @@ export const useAudio = create<State>((set) => ({
   ) =>
     set((state) => ({
       ...state,
-      track: { ...state.track, audioSrc: audioSrc.musicUrl },
       audioSrc,
     })),
 }));

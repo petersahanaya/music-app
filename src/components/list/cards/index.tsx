@@ -28,7 +28,7 @@ const Cards = ({ listOfMusic, heading, className }: CardsProps) => {
 
       <section className="w-full h-full grid xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-3 grid-cols-2 grid-rows-3 gap-4">
         {listOfMusic.map((music, idx) => (
-          <Card key={idx} music={music} />
+          <Card key={idx} listOfMusic={listOfMusic} music={music} />
         ))}
       </section>
     </main>
