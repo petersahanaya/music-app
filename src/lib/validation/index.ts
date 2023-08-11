@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const MB = 1024;
 
-const MAX_IMAGE_FILE_SIZE = MB * 5;
+const MAX_IMAGE_FILE_SIZE = MB * 2;
 const MAX_AUDIO_FILE_SIZE = MB * 10;
 
 const ACCEPTED_IMAGE_TYPE = ["image/jpg", "image/jpeg", "image/png"];
@@ -31,7 +31,7 @@ export const schema = z.object({
     .custom<File>()
     .refine(
       (file: File) => file?.size >= MAX_IMAGE_FILE_SIZE,
-      "Max image size is 5MB."
+      "Max image size is 2MB."
     )
     .refine(
       (file: File) => ACCEPTED_IMAGE_TYPE.includes(file?.type),
@@ -41,7 +41,7 @@ export const schema = z.object({
     .custom<File>()
     .refine(
       (file: File) => file?.size >= MAX_IMAGE_FILE_SIZE,
-      "Max image size is 5MB."
+      "Max image size is 2MB."
     )
     .refine(
       (file: File) => ACCEPTED_IMAGE_TYPE.includes(file?.type),

@@ -46,12 +46,12 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
     <>
       <article
         className={twMerge(
-          `w-[200px] cursor-pointer h-[300px] bg-neutral-900 hover:bg-white/20 transition-colors rounded-md p-2 group ${className}`
+          `w-full h-[300px] cursor-pointer bg-[#232323] hover:bg-white/20 transition-colors rounded-md p-3 group ${className} flex flex-col justify-start items-center gap-4`
         )}
       >
         <div className="w-full h-[70%] relative overflow-hidden rounded-md">
           <Image
-            className="object-cover"
+            className="object-cover "
             src={music.largeImage}
             alt={music.title}
             fill
@@ -62,7 +62,7 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
                 track?.musicUrl === music.musicUrl ? "translateY(0px)" : "",
             }}
             onClick={onPressedSetAudio}
-            className={`absolute bottom-[10px] right-[10px] w-max opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 h-max p-4 rounded-full bg-stone-100 hover:bg-stone-300 ${
+            className={`absolute bottom-[10px] right-[10px] w-max opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 h-max p-4 rounded-full bg-green-500 hover:bg-green-600 ${
               track?.musicUrl === music.musicUrl && "translate-y-0 opacity-100"
             } text-stone-950 transition-all`}
           >
@@ -74,9 +74,11 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
           </div>
         </div>
 
-        <section className="w-full">
-          <h4 className="text-lg font-400">{music.title}</h4>
-          <p className="w-full text-stone-300 line-clamp-2 text-ellipsis overflow-hidden">
+        <section className="w-full flex flex-col justify-start items-start gap-2">
+          <h4 className="w-full text-xl font-[700] text-stone-200 capitalize lg:text-xl font-400 whitespace-nowrap text-ellipsis overflow-hidden">
+            {music.title}
+          </h4>
+          <p className="w-full text-lg lg:text-lg text-stone-400 line-clamp-2 text-ellipsis overflow-hidden">
             {music.description}
           </p>
         </section>

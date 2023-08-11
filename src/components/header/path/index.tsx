@@ -42,22 +42,24 @@ const Path = ({ session }: PathProps) => {
         {!session && (
           <div className="flex justify-start items-center gap-4 md:hidden">
             <Button
-              className="w-[120px] text-center p-3 bg-green-500 text-black font-[600]"
+              className="w-[160px] text-center bg-white border-none text-black rounded-full capitalize p-4"
               onClick={() => onPressedToggleAuth()}
             >
-              <p className="uppercase text-sm">Sign in</p>
+              <p className="text-xl font-[700]">Sign in</p>
             </Button>
             <Button
-              className="w-[120px] text-center p-3"
+              className="w-[120px] text-center border-none"
               types="outline"
               onClick={() => onPressedToggleAuth()}
             >
-              <p className="text-stone-100 text-sm uppercase">Join</p>
+              <p className="text-stone-100 text-xl capitalize font-[700]">
+                Join
+              </p>
             </Button>
           </div>
         )}
 
-        <h4 className="hidden md:inline-block text-xl font-[400] text-stone-300 uppercase tracking-tighter">
+        <h4 className="hidden md:inline-block text-3xl text-stone-300 font-[700] uppercase">
           {path === "/" ? "Discover" : path.split("/")[1]}
         </h4>
       </div>
@@ -65,7 +67,7 @@ const Path = ({ session }: PathProps) => {
       {!session && (
         <>
           <nav className="flex justify-start items-center gap-3">
-            <Link href="/search">
+            <Link href="/search" className="hidden sm:inline-block">
               <BiSearch size={30} className="text-stone-200 ml-10" />
             </Link>
             <button className="md:hidden inline-block">
@@ -73,17 +75,19 @@ const Path = ({ session }: PathProps) => {
             </button>
             <section className="md:flex justify-start items-center gap-3 hidden">
               <Button
-                className="w-[120px] text-center bg-green-500 text-black font-[600]"
+                className="w-[160px] text-center bg-white border-none text-black font-[600] rounded-full capitalize p-4 "
                 onClick={() => onPressedToggleAuth()}
               >
-                <p className="uppercase text-sm ">Sign in</p>
+                <p className="text-xl font-[700]">Sign in</p>
               </Button>
               <Button
-                className="w-[120px] text-center"
+                className="w-[120px] text-center border-none"
                 types="outline"
                 onClick={() => onPressedToggleAuth()}
               >
-                <p className="text-stone-100 text-sm uppercase">Join</p>
+                <p className="text-stone-100 text-xl capitalize font-[700]">
+                  Join
+                </p>
               </Button>
             </section>
           </nav>

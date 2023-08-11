@@ -2,6 +2,8 @@
 
 import ListTile from "@component/listTile";
 import { RiHomeFill, RiHomeLine } from "react-icons/ri";
+import { VscLibrary } from "react-icons/vsc";
+import { PiBrowsersBold } from "react-icons/pi";
 import {
   BsMusicNoteBeamed,
   BsMusicNote,
@@ -16,55 +18,57 @@ const Sidebar = () => {
   const path = usePathname();
 
   return (
-    <aside className="hidden md:inline-block w-[20%] h-full bg-black px-5 pt-[.9rem] ">
-      <header className="w-full h-[70px] font-[700] text-white text-4xl py-6">
-        <h3>P3Music</h3>
-      </header>
-
-      <main className="w-full h-max mt-9 flex flex-col justify-start items-start gap-3">
-        <div className="">
-          <h4 className="text-lg text-white">Browse Music</h4>
-        </div>
-        <Link href="/" className="w-full">
-          <ListTile
-            className={` hover:opacity-60  transition-opacity ${
-              path === "/" ? "bg-stone-600" : "text-sm"
-            }`}
-          >
-            {path !== "/" ? (
-              <RiHomeLine size={20} className="text-stone-200" />
-            ) : (
-              <RiHomeFill size={20} className="text-stone-200" />
-            )}
-            <p className="text-md text-stone-200">Discover</p>
-          </ListTile>
-        </Link>
-        <Link href="/album" className="w-full">
-          <ListTile
-            className={` hover:opacity-60 transition-opacity ${
-              path === "/album" ? "bg-stone-600" : "text-sm"
-            }`}
-          >
-            <BsMusicNoteBeamed size={20} className="text-stone-200" />
-            <p className="text-md text-stone-200">Album</p>
-          </ListTile>
-        </Link>
-        <Link href="/genres" className="w-full">
-          <ListTile
-            className={` hover:opacity-60 transition-opacity ${
-              path === "/genres" ? "bg-stone-600" : "text-sm"
-            }`}
-          >
-            <BsMusicNote size={20} className="text-stone-200" />
-            <p className="text-md text-stone-200">Genres</p>
-          </ListTile>
-        </Link>
+    <aside className="hidden md:inline-block w-[20%] md:w-[19.5%] h-full bg-black fixed top-0 left-0 pt-4">
+      <main className="w-full h-max flex flex-col justify-start items-start gap-8 bg-stone-900 rounded-xl p-4">
+        <section className="w-full h-max flex flex-col justify-start items-start gap-3">
+          <div className="">
+            <ListTile>
+              <PiBrowsersBold size={30} className="text-stone-300" />
+              <h4 className="text-xl text-stone-300 font-[600]">Home</h4>
+            </ListTile>
+          </div>
+          <Link href="/" className="w-full">
+            <ListTile
+              className={` hover:opacity-60  transition-opacity ${
+                path === "/" ? "bg-stone-600" : "text-sm"
+              }`}
+            >
+              {path !== "/" ? (
+                <RiHomeLine size={20} className="text-stone-200" />
+              ) : (
+                <RiHomeFill size={20} className="text-stone-200" />
+              )}
+              <p className="text-md text-stone-200">Discover</p>
+            </ListTile>
+          </Link>
+          <Link href="/album" className="w-full">
+            <ListTile
+              className={` hover:opacity-60 transition-opacity ${
+                path === "/album" ? "bg-stone-600" : "text-sm"
+              }`}
+            >
+              <BsMusicNoteBeamed size={20} className="text-stone-200" />
+              <p className="text-md text-stone-200">Album</p>
+            </ListTile>
+          </Link>
+          <Link href="/genres" className="w-full">
+            <ListTile
+              className={` hover:opacity-60 transition-opacity ${
+                path === "/genres" ? "bg-stone-600" : "text-sm"
+              }`}
+            >
+              <BsMusicNote size={20} className="text-stone-200" />
+              <p className="text-md text-stone-200">Genres</p>
+            </ListTile>
+          </Link>
+        </section>
       </main>
 
-      <main className="w-full h-max mt-9 flex flex-col justify-start items-start gap-3">
-        <div className="">
-          <h4 className="text-lg text-white">Library</h4>
-        </div>
+      <main className="w-full h-max mt-3 flex flex-col justify-start items-start gap-3 bg-stone-900 rounded-xl p-4">
+        <ListTile>
+          <VscLibrary size={30} className="text-stone-300" />
+          <h4 className="text-xl text-stone-300 font-[700]">Library</h4>
+        </ListTile>
 
         <Link
           href="/favorite"
@@ -100,6 +104,13 @@ const Sidebar = () => {
             <p className="text-sm text-stone-200">History</p>
           </ListTile>
         </Link>
+      </main>
+
+      <main className="w-[80%] h-max flex justify-around items-between flex-wrap gap-8 mt-8 p-2">
+        <p className="text-stone-400 text-sm">Legal</p>
+        <p className="text-stone-400 text-sm">Privacy Center</p>
+        <p className="text-stone-400 text-sm">Privacy Policy</p>
+        <p className="text-stone-400 text-sm">Cookies</p>
       </main>
     </aside>
   );

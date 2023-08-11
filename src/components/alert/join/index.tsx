@@ -10,16 +10,18 @@ const AlertJoin = ({ session }: SessionProps) => {
 
   if (!session)
     return (
-      <footer className="w-screen h-[80px] bg-gradient-to-l to-lime-600 from-blue-300 fixed bottom-0 left-0 flex justify-between items-center p-3 px-8">
+      <footer className="hidden sm:flex w-screen h-[120px] xl:h-[90px] bg-gradient-to-l to-lime-600 from-blue-300 fixed bottom-0 left-0 justify-between items-center p-3 px-8 z-50">
         <section>
-          <p className="text-white text-lg">Preview of P3Music</p>
+          <p className="text-white text-2xl capitalize font-[600]">
+            Preview of P3Music
+          </p>
           <p className="text-white md:text-lg">
             Join and get all songs and instrument for free !
           </p>
         </section>
 
         <Button
-          className="md:w-[200px] w-[130px] text-center bg-white text-stone-800 font-[700] uppercase"
+          className="md:w-[200px] w-[150px] text-center bg-white text-xl font-[700] rounded-full text-stone-800 capitalize p-3"
           onClick={() => onPressedToggleAuthDropdown()}
         >
           Join

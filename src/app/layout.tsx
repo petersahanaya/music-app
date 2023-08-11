@@ -33,9 +33,9 @@ export default async function RootLayout({
       <body className={figtree.className}>
         <SessionProvider>
           <AlertUnAuthenticated />
-          <main className="w-screen h-screen flex flex-col md:flex-row items-center">
+          <main className="w-screen h-screen flex flex-col md:flex-row items-center justify-between md:pt-4 overflow-hidden">
             <Sidebar />
-            <Header />
+            <div className="w-[19%] h-full hidden md:inline-block"></div>
             {children}
             <AlertJoin session={session!} />
             <ProfileDropDown session={session!} />
@@ -47,3 +47,5 @@ export default async function RootLayout({
     </html>
   );
 }
+
+//pb-32

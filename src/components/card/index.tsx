@@ -10,7 +10,7 @@ type CardProps = {
 
 const Card = ({ props }: CardProps) => {
   return (
-    <motion.section className="w-[280px] h-[370px] bg-stone-800 p-4 rounded-md flex flex-col justify-start items-start gap-3">
+    <motion.section className="w-[280px] h-[370px] bg-stone-900 p-4 rounded-md flex flex-col justify-start items-start gap-3">
       <div className="w-full h-[80%] relative p-4 rounded-md overflow-hidden">
         <Image
           fill

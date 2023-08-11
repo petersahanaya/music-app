@@ -5,3 +5,7 @@
 body {
   background: black;
 }
+
+html {
+  scrollbar-color: #a8a8a8 #727272;
+}

@@ -1,6 +1,7 @@
 import Cards from "@component/list/cards";
 import PreviewCarousel from "@component/carousel/previews";
 import { Music } from "@prisma/client";
+import Header from "@component/header";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
@@ -33,22 +34,19 @@ const getMusic = async ({ take }: getMusicParam) => {
 };
 
 const Discover = async () => {
-  const { listOfMusic } = await getMusic({ take: 9 });
+  const { listOfMusic } = await getMusic({ take: 12 });
 
   return (
-    <main className="bg-neutral-950 w-full h-full md:mt-40 text-white flex justify-start items-center flex-col pt-8">
-      <div className="w-full pb-40 px-5 ">
-        {/* <PreviewCarousel
-        className="md:w-[90%] w-full"
-        listOfMusic={listOfMusic.slice(0, 3)}
-      /> */}
+    <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl ">
+      <Header />
 
+      <section className="w-full h-full overflow-y-scroll">
         <Cards
+          heading="New Trending"
           listOfMusic={listOfMusic}
-          heading="New Release"
-          // className="pt-24 sm:pt-0"
+          className="mt-32 px-3 pb-12"
         />
-      </div>
+      </section>
     </main>
   );
 };
