@@ -13,6 +13,7 @@ import Button from "@component/button";
 import { usePostDropDown } from "@state/store/post";
 import { fadeUpAnimate } from "@animation/fade";
 import { popUpAnimate } from "@animation/popup";
+import { signOut } from "next-auth/react";
 
 const ProfileDropDown = ({ session }: SessionProps) => {
   const stateProfile = useToggleProfile();
@@ -85,7 +86,7 @@ const ProfileDropDown = ({ session }: SessionProps) => {
               variants={fadeUpAnimate}
             >
               <Button
-                onClick={() => {}}
+                onClick={() => signOut()}
                 types="outline"
                 className="w-[90%] m-auto border-[1px] border-red-600 text-red-500 "
               >

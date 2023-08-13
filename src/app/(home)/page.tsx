@@ -1,30 +1,51 @@
-import Cards from "@component/list/cards";
-import PreviewCarousel from "@component/carousel/previews";
 import { Music } from "@prisma/client";
+import { headers } from "next/headers";
 import Header from "@component/header";
+import MainContent from ".";
+import { parsedUrl } from "@lib/functions/parsedUrl";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@auth/route";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
 
-type getMusicParam = {
+export type getMusicParam = {
   take: number;
+  type: "history" | "";
 };
 
-const getMusic = async ({ take }: getMusicParam) => {
+const getMusic = async ({ take, type }: getMusicParam) => {
+  const url = parsedUrl({
+    path: "api/song",
+    searchParams: [
+      { key: "type", value: type },
+      { key: "take", value: String(take) },
+    ],
+  });
+
   try {
-    const resp = await fetch(`http://localhost:3000/api/song?take=${take}`, {
+    const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
+      headers: headers(),
     });
 
     if (!resp.ok) {
+      if (type === "history") {
+        return [];
+      }
+
       throw new Error("Error when try to fetch.");
     }
 
     const { listOfMusic } = (await resp.json()) as { listOfMusic: Music[] };
 
-    return { listOfMusic };
+    console.log("LISOFMUSIC", listOfMusic);
+
+    return listOfMusic;
   } catch (e) {
+    console.log(e);
+
     if (e instanceof Error) {
       throw new Error(e.message);
     }
@@ -34,19 +55,22 @@ const getMusic = async ({ take }: getMusicParam) => {
 };
 
 const Discover = async () => {
-  const { listOfMusic } = await getMusic({ take: 12 });
+  const session = await getServerSession(authOptions);
+
+  const [listOfMusic, historyMusic] = await Promise.all([
+    getMusic({ take: 12, type: "" }),
+    getMusic({ take: 8, type: "history" }),
+  ]);
 
   return (
-    <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl ">
+    <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl pb-32 overflow-y-scroll">
       <Header />
 
-      <section className="w-full h-full overflow-y-scroll">
-        <Cards
-          heading="New Trending"
-          listOfMusic={listOfMusic}
-          className="mt-32 px-3 pb-12"
-        />
-      </section>
+      <MainContent
+        session={session}
+        historyMusic={historyMusic}
+        listOfMusic={listOfMusic}
+      />
     </main>
   );
 };

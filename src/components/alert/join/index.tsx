@@ -10,7 +10,7 @@ const AlertJoin = ({ session }: SessionProps) => {
 
   if (!session)
     return (
-      <footer className="hidden sm:flex w-screen h-[120px] xl:h-[90px] bg-gradient-to-l to-lime-600 from-blue-300 fixed bottom-0 left-0 justify-between items-center p-3 px-8 z-50">
+      <footer className="hidden sm:flex w-screen h-[90px] xl:h-[90px] bg-gradient-to-l to-lime-600 from-blue-300 fixed bottom-0 left-0 justify-between items-center p-3 px-8 z-30">
         <section>
           <p className="text-white text-2xl capitalize font-[600]">
             Preview of P3Music

@@ -153,7 +153,11 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
   }, []);
 
   const onPressedChangeShuffle = useCallback(() => {
-    setState((prev) => ({ ...prev, shuffle: !prev.shuffle, loop : !prev.shuffle ? false : prev.loop }));
+    setState((prev) => ({
+      ...prev,
+      shuffle: !prev.shuffle,
+      loop: !prev.shuffle ? false : prev.loop,
+    }));
   }, []);
 
   const onPressedChangeVolume = useCallback(() => {
@@ -193,7 +197,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
           src={musicUrl}
         />
         {/* IMAGE */}
-        <section className="cursor-pointer group flex justify-start items-center gap-3">
+        <section className="cursor-pointer group hidden sm:flex justify-start items-center gap-3">
           <div className="sm:w-[80px] sm:h-[80px] w-[50px] h-[50px] rounded-md relative overflow-hidden">
             <Image className="object-cover" src={coverImage} alt={title} fill />
           </div>
@@ -258,9 +262,9 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
           </section>
 
           {/* PROGRESS */}
-          <nav className="w-full flex flex-col justify-start items-center gap-2">
+          <nav className="w-full md:max-w-[600px] flex flex-col justify-start items-center gap-2">
             <div className="w-full h-[8px] rounded-full group flex justify-between items-center gap-3">
-              <p className="text-stone-300 w-[50px] md:w-[80px] text-xs md:text-sm">
+              <p className="w-[70px] md:w-[85px] text-stone-300  xs:text-sm text-[.7rem] ">
                 {formatTime(time.currentTime)}
               </p>
               <input
@@ -271,7 +275,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
                 onChange={onDragHandleAudio}
                 className="w-full cursor-pointer accent-stone-700 h-[4px]"
               />
-              <p className="text-stone-400 w-[50px] md:w-[80px] text-xs md:text-sm">
+              <p className="w-[70px] md:w-[85px] text-stone-400   xs:text-sm text-[.7rem]">
                 {formatTime(time.duration)}
               </p>
             </div>
@@ -309,4 +313,5 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
   );
 };
 
+//w-[50px] md:w-[80px]
 export default AudioPlayer;

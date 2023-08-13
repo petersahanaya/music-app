@@ -1,7 +1,8 @@
 "use client";
 
 import { useToggleAuth } from "@state/store/toggleAuth";
-import { SiFacebook, SiGoogle } from "react-icons/si";
+import { SiFacebook } from "react-icons/si";
+import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 import Button from "@component/button";
@@ -43,7 +44,7 @@ const AuthDropDown = () => {
               <section className="w-full h-[90%] flex flex-col justify-center items-center">
                 <motion.div
                   variants={fadeUpAnimate}
-                  className="w-[300px] h-[300px] rounded-md relative overflow-hidden"
+                  className="w-[300px] h-[300px] sm:w-[200px]  rounded-md relative overflow-hidden"
                 >
                   <Image
                     className="object-cover"
@@ -66,20 +67,20 @@ const AuthDropDown = () => {
                   variants={fadeUpAnimate}
                 >
                   <Button
-                    className="flex justify-start items-center gap-3 px-4 text-black font-[500] bg-green-500 p-4 text-xl rounded-full w-[300px] hover:bg-green-600 transition-colors"
+                    className="flex justify-start items-center gap-3 px-4 text-black font-[500] bg-white p-4 text-xl rounded-full w-[300px] hover:bg-stone-200 transition-colors"
                     onClick={() => onPressedSignIn("facebook")}
                     types="fill"
                   >
-                    <SiFacebook size={30} />
-                    <p>Facebook</p>
+                    <SiFacebook size={30} className="text-blue-600" />
+                    <p className="text-xl font-[700]">Facebook</p>
                   </Button>
                   <Button
-                    className="flex justify-start items-center gap-3 px-4 text-black font-[500] bg-green-500 p-4 text-xl rounded-full w-[300px] hover:bg-green-600 transition-colors"
+                    className="flex justify-start items-center gap-3 px-4 text-black font-[500] bg-white p-4 text-xl rounded-full w-[300px] hover:bg-stone-200 transition-colors"
                     onClick={() => onPressedSignIn("google")}
                     types="fill"
                   >
-                    <SiGoogle size={30} />
-                    <p>Google</p>
+                    <FcGoogle size={30} />
+                    <p className="text-xl font-[700]">Google</p>
                   </Button>
                 </motion.div>
               </section>

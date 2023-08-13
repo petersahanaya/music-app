@@ -33,8 +33,8 @@ const Path = ({ session }: PathProps) => {
             >
               <Profile src={session.user.image!} />
             </div>
-            <p className="text-sm md:hidden text-stone-300">
-              {session.user.name}
+            <p className="md:hidden text-stone-300">
+              {session.user.name?.slice(0, 6)}
             </p>
           </>
         )}
@@ -42,17 +42,17 @@ const Path = ({ session }: PathProps) => {
         {!session && (
           <div className="flex justify-start items-center gap-4 md:hidden">
             <Button
-              className="w-[160px] text-center bg-white border-none text-black rounded-full capitalize p-4"
+              className="w-[120px] text-center bg-white border-none text-black rounded-full capitalize p-4"
               onClick={() => onPressedToggleAuth()}
             >
-              <p className="text-xl font-[700]">Sign in</p>
+              <p className="text-lg font-[700]">Sign in</p>
             </Button>
             <Button
               className="w-[120px] text-center border-none"
               types="outline"
               onClick={() => onPressedToggleAuth()}
             >
-              <p className="text-stone-100 text-xl capitalize font-[700]">
+              <p className="text-stone-100 text-lg capitalize font-[700]">
                 Join
               </p>
             </Button>
@@ -96,16 +96,26 @@ const Path = ({ session }: PathProps) => {
       {session && session.user && (
         <nav className="flex justify-start items-center gap-3">
           <>
-            <section className="flex justify-start items-center gap-7 pr-10">
+            <section className="flex justify-between md:justify-start items-center gap-7 pr-10">
               <Link href="/search">
                 <BiSearch size={30} className="text-stone-200 ml-10" />
               </Link>
-              <p role="button" className="text-stone-200">
+              <p
+                role="button"
+                className="text-stone-200 hidden md:inline-block"
+              >
                 New Releases
               </p>
-              <p role="button" className="text-stone-200">
+              <p
+                role="button"
+                className="text-stone-200 hidden md:inline-block"
+              >
                 Popular
               </p>
+
+              <button className="md:hidden inline-block">
+                <CiMenuBurger size={40} className="text-stone-100" />
+              </button>
             </section>
             <div
               onClick={() => onPressedToggleProfileDropDown()}

@@ -19,6 +19,7 @@ model User {
 
   Album    Music[] @relation("album")
   Favorite Music[] @relation("favorite")
+  History  Music[] @relation("history")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -34,6 +35,9 @@ model Music {
   views       Int    @default(0)
   lyric       String @db.String
   genre       String
+
+  history   User?   @relation("history", fields: [historyId], references: [userId])
+  historyId String?
 
   favorite   User?   @relation("favorite", fields: [favoriteId], references: [userId])
   favoriteId String?

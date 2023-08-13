@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryUploadFile } from "@lib/functions/converter";
 import { getServerSession } from "next-auth";
-import { OPTIONS } from "@auth/route";
+import { authOptions } from "@auth/route";
 import { z } from "zod";
 import { schema } from "@lib/validation";
 
@@ -29,7 +29,7 @@ cloudinary.config({
 });
 
 export async function POST(req: Request) {
-  const session = await getServerSession(OPTIONS);
+  const session = await getServerSession(authOptions);
 
   if (!session || !session.user)
     return NextResponse.json(

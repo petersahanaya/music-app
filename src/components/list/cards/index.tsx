@@ -4,11 +4,13 @@ import { Music } from "@prisma/client";
 import { twMerge } from "tailwind-merge";
 import Card from "../card";
 import Link from "next/link";
+import ListView from "@component/listView";
 
 type CardsProps = {
   listOfMusic: Music[];
   className?: string;
   heading: string;
+  type?: "history";
 };
 
 const Cards = ({ listOfMusic, heading, className }: CardsProps) => {
@@ -22,14 +24,22 @@ const Cards = ({ listOfMusic, heading, className }: CardsProps) => {
         <h3 className="text-3xl capitalize text-white font-[700]">{heading}</h3>
 
         <Link href="/music">
-          <p className="text-stone-200 md:text-xl pr-3">see all</p>
+          <p className="text-stone-400 hover:underline text-sm md:text-xl pr-3">
+            see all
+          </p>
         </Link>
       </section>
 
-      <section className="w-full grid xl:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 grid-rows-3 xl:grid-rows-2 justify-items-center gap-4">
-        {listOfMusic.map((music, idx) => (
-          <Card key={idx} listOfMusic={listOfMusic} music={music} />
-        ))}
+      <section className="w-full h-full">
+        {listOfMusic.length ? (
+          <ListView>
+            {listOfMusic.map((music, idx) => (
+              <Card key={idx} listOfMusic={listOfMusic} music={music} />
+            ))}
+          </ListView>
+        ) : (
+          <p className="text-2xl font-[700] text-white">Nothing 😴</p>
+        )}
       </section>
     </main>
   );

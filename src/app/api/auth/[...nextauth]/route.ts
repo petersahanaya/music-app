@@ -1,10 +1,10 @@
-import { AuthOptions } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import { prisma } from "@lib/db";
 
-export const OPTIONS: AuthOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -55,9 +55,17 @@ export const OPTIONS: AuthOptions = {
     signOut: "/",
   },
   secret: "secret",
+  logger: {
+    debug(code, metadata) {
+      console.log("DEBUG", code);
+    },
+    warn(code) {
+      console.log("WARN", code);
+    },
+  },
   debug: process.env.NODE_ENV === "development",
 };
 
-const handler = NextAuth(OPTIONS);
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

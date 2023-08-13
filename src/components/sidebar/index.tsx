@@ -18,7 +18,7 @@ const Sidebar = () => {
   const path = usePathname();
 
   return (
-    <aside className="hidden md:inline-block w-[20%] md:w-[19.5%] h-full bg-black fixed top-0 left-0 pt-4">
+    <aside className="hidden md:inline-block w-[20%] md:w-[19.5%] h-full bg-black fixed top-0 left-0 pt-2">
       <main className="w-full h-max flex flex-col justify-start items-start gap-8 bg-stone-900 rounded-xl p-4">
         <section className="w-full h-max flex flex-col justify-start items-start gap-3">
           <div className="">
@@ -64,7 +64,7 @@ const Sidebar = () => {
         </section>
       </main>
 
-      <main className="w-full h-max mt-3 flex flex-col justify-start items-start gap-3 bg-stone-900 rounded-xl p-4">
+      <main className="w-full h-max mt-2 flex flex-col justify-start items-start gap-3 bg-stone-900 rounded-xl p-4">
         <ListTile>
           <VscLibrary size={30} className="text-stone-300" />
           <h4 className="text-xl text-stone-300 font-[700]">Library</h4>

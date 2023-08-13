@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { Figtree } from "next/font/google";
-import { OPTIONS } from "@auth/route";
+import { authOptions } from "@auth/route";
 import "./globals.css";
 
 import Sidebar from "@component/sidebar";
@@ -26,14 +26,14 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession(OPTIONS);
+  const session = await getServerSession(authOptions);
 
   return (
     <html lang="en">
       <body className={figtree.className}>
         <SessionProvider>
           <AlertUnAuthenticated />
-          <main className="w-screen h-screen flex flex-col md:flex-row items-center justify-between md:pt-4 overflow-hidden">
+          <main className="w-screen h-screen flex flex-col md:flex-row items-center justify-between md:pt-2 overflow-hidden">
             <Sidebar />
             <div className="w-[19%] h-full hidden md:inline-block"></div>
             {children}
