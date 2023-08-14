@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import Card from "../card";
 import Link from "next/link";
 import ListView from "@component/listView";
+import RecentlyPlay from "@/components/recentlyPlay";
 
 type CardsProps = {
   listOfMusic: Music[];
@@ -13,7 +14,8 @@ type CardsProps = {
   type?: "history";
 };
 
-const Cards = ({ listOfMusic, heading, className }: CardsProps) => {
+const Cards = ({ listOfMusic, heading, className, type }: CardsProps) => {
+
   return (
     <main
       className={twMerge(
@@ -31,14 +33,20 @@ const Cards = ({ listOfMusic, heading, className }: CardsProps) => {
       </section>
 
       <section className="w-full h-full">
-        {listOfMusic.length ? (
-          <ListView>
-            {listOfMusic.map((music, idx) => (
-              <Card key={idx} listOfMusic={listOfMusic} music={music} />
-            ))}
-          </ListView>
+        {type === "history" ? (
+          <RecentlyPlay
+            listOfMusic={listOfMusic}
+          />
         ) : (
-          <p className="text-2xl font-[700] text-white">Nothing 😴</p>
+          listOfMusic.length && (
+            <>
+              <ListView>
+                {listOfMusic.map((music, idx) => (
+                  <Card key={idx} listOfMusic={listOfMusic} music={music} />
+                ))}
+              </ListView>
+            </>
+          )
         )}
       </section>
     </main>

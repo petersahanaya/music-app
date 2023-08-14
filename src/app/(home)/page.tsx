@@ -40,8 +40,6 @@ const getMusic = async ({ take, type }: getMusicParam) => {
 
     const { listOfMusic } = (await resp.json()) as { listOfMusic: Music[] };
 
-    console.log("LISOFMUSIC", listOfMusic);
-
     return listOfMusic;
   } catch (e) {
     console.log(e);
@@ -59,7 +57,7 @@ const Discover = async () => {
 
   const [listOfMusic, historyMusic] = await Promise.all([
     getMusic({ take: 12, type: "" }),
-    getMusic({ take: 8, type: "history" }),
+    getMusic({ take: 5, type: "history" }),
   ]);
 
   return (

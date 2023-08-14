@@ -7,6 +7,10 @@ import { TrackType, useAudio } from "@state/store/audio";
 import { useAlertUnAuthenticate } from "@state/store/alert";
 import { useSession } from "next-auth/react";
 import { FaPlay, FaPause } from "react-icons/fa";
+import { parsedUrl } from "@/lib/functions/parsedUrl";
+import { useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { useRecentlyPlayed } from "@/state/store/history";
 
 type CardProps = {
   music: Music;
@@ -16,6 +20,14 @@ type CardProps = {
 
 const Card = ({ listOfMusic, music, className }: CardProps) => {
   const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
+
+  const onPressedSortPlaying = useRecentlyPlayed(
+    (state) => state.onPressedSortPlaying
+  );
+
+  const onPressedChangeLoadHistory = useRecentlyPlayed(
+    (state) => state.onLoadSetHistoryMusic
+  );
 
   const onPressedChangeAudioSrc = useAudio(
     (state) => state.onPressedChangedAudioSrc
@@ -29,18 +41,50 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
 
   const { data: session } = useSession();
 
-  const onPressedSetAudio = () => {
+  const onPressedSetAudio = useCallback(async () => {
     if (!session || !session.user) {
       onPressedAlertUnAuthenticate(music.coverImage);
     } else {
       onPressedChangeAudioSrc(music);
+
       onPressedChangeTrack({
         currentAudioSrc: music.musicUrl,
         listOfMusic,
         type: TrackType.Default,
       });
+
+      // onPressedChangeLoadHistory([
+      //   music,
+      //   ...listOfMusic.filter((musicc) => musicc.id !== music.id),
+      // ]);
+
+      onPressedSortPlaying(music);
+
+      const url = parsedUrl({
+        path: "api/song",
+        searchParams: [{ key: "songId", value: music.id }],
+      });
+
+      try {
+        const resp = await fetch(url, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await resp.json();
+      } catch (e: unknown) {
+        console.error(e);
+      }
     }
-  };
+  }, [
+    listOfMusic,
+    music,
+    onPressedAlertUnAuthenticate,
+    onPressedChangeAudioSrc,
+    onPressedChangeTrack,
+    onPressedSortPlaying,
+    session,
+  ]);
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+import { ObjectId } from "mongodb";
 
 export default async function FileToBase64(file: File) {
   return new Promise<string>(async (resolve, reject) => {
@@ -41,4 +42,11 @@ export async function CloudinaryUploadFile(file: File) {
   });
 
   return result;
+}
+
+export function ConvertObjectId(hex: string) {
+  const objectId = new ObjectId(hex);
+  console.log(objectId.id);
+
+  return objectId;
 }

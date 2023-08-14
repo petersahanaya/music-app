@@ -12,6 +12,8 @@ import { RiSkipLeftFill } from "react-icons/ri";
 import Tooltip from "../tooltip";
 import { TrackType, useAudio } from "@state/store/audio";
 import { trackingMusic } from "@lib/functions/trackingMusic";
+import { useRecentlyPlayed } from "@/state/store/history";
+import { Music } from "@prisma/client";
 
 type AudioProps = {
   title: string;
@@ -35,6 +37,8 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const onPressedSortRecentlyPlaying = useRecentlyPlayed((state) => state.onPressedSortPlaying)
+
   const listOfMusic = useAudio((state) => state.track.listOfMusic);
 
   const onPressedChangeAudio = useAudio(
@@ -53,8 +57,10 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
         listOfMusic: [],
         type: TrackType.SetCurrentMusic,
       });
+
+      onPressedSortRecentlyPlaying(prevMusic as Music)
     }
-  }, [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeTrack]);
+  }, [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeTrack, onPressedSortRecentlyPlaying]);
 
   const onPressedChangeToNext = useCallback(() => {
     const nextMusic = trackingMusic(musicUrl, "next", listOfMusic);
@@ -67,8 +73,10 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
         listOfMusic: [],
         type: TrackType.SetCurrentMusic,
       });
+
+      onPressedSortRecentlyPlaying(nextMusic as Music)
     }
-  }, [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeTrack]);
+  }, [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeTrack, onPressedSortRecentlyPlaying]);
 
   const onDragChangeVolume = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const seekValue = parseFloat(e.target.value);

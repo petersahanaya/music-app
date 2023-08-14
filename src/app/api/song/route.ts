@@ -2,12 +2,9 @@ import { prisma } from "@lib/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@auth/route";
-import { Music } from "@prisma/client";
+import { ConvertObjectId } from "@lib/functions/converter";
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  console.log("SESSION", session);
   const url = req.url;
 
   const { searchParams } = new URL("", url);
@@ -123,14 +120,9 @@ export async function GET(req: Request) {
     }
 
     if (type === "history") {
-      console.log("TRIGGER");
       const session = await getServerSession(authOptions);
 
-      console.log(session);
-
       if (!session || !session.user) {
-        console.log("UNAuthorized Trigger");
-
         return NextResponse.json(
           { message: "UnAuthorized User" },
           { status: 403 }
@@ -152,14 +144,10 @@ export async function GET(req: Request) {
         skip: Number(offset) || 0,
       });
 
-      console.log({ historyMusic });
-
       return NextResponse.json({
         listOfMusic: historyMusic ? historyMusic.History : [],
       });
     }
-
-    console.log("TRIGGER");
 
     const listOfMusic = await prisma.music.findMany({
       skip: Number(offset) || 0,
@@ -191,7 +179,9 @@ export async function GET(req: Request) {
           profile: false,
 */
 
-export async function Update(req: Request) {
+export async function PATCH(req: Request) {
+  console.log("TRIGGER UPDATE");
+
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -214,7 +204,7 @@ export async function Update(req: Request) {
   try {
     const found = await prisma.music.findUnique({
       where: {
-        id: session.user.userId as string,
+        id: songId,
       },
     });
 
@@ -225,21 +215,22 @@ export async function Update(req: Request) {
       );
     }
 
-    const result = await prisma.user.update({
+    await prisma.user.update({
       where: {
         userId: session.user.userId as string,
       },
       data: {
         History: {
           connect: {
-            id: found.id,
+            id: songId,
           },
         },
       },
     });
 
-    console.log("RESULT", result);
+    return NextResponse.json({ message: "Successfully added" });
   } catch (e: any) {
+    console.log(e);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 }
