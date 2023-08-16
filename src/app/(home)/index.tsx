@@ -24,6 +24,7 @@ const MainContent = ({
             listOfMusic={historyMusic}
             className="mt-32 px-3 pb-3 "
             type="history"
+            link="/history"
           />
         </section>
       )}
@@ -34,6 +35,7 @@ const MainContent = ({
           className={`px-3 pb-12 ${
             !session || !session.user ? "mt-0" : "mt-32"
           }`}
+          link="/music"
         />
       </section>
     </main>

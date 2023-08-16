@@ -93,37 +93,29 @@ const Path = ({ session }: PathProps) => {
           </nav>
         </>
       )}
-      {session && session.user && (
+      {path === "/" && session && session.user && (
         <nav className="flex justify-start items-center gap-3">
-          <>
-            <section className="flex justify-between md:justify-start items-center gap-7 pr-10">
-              <Link href="/search">
-                <BiSearch size={30} className="text-stone-200 ml-10" />
-              </Link>
-              <p
-                role="button"
-                className="text-stone-200 hidden md:inline-block"
-              >
-                New Releases
-              </p>
-              <p
-                role="button"
-                className="text-stone-200 hidden md:inline-block"
-              >
-                Popular
-              </p>
+          <section className="flex justify-between md:justify-start items-center gap-7 pr-10">
+            <Link href="/search">
+              <BiSearch size={30} className="text-stone-200 ml-10" />
+            </Link>
+            <p role="button" className="text-stone-200 hidden md:inline-block">
+              New Releases
+            </p>
+            <p role="button" className="text-stone-200 hidden md:inline-block">
+              Popular
+            </p>
 
-              <button className="md:hidden inline-block">
-                <CiMenuBurger size={40} className="text-stone-100" />
-              </button>
-            </section>
-            <div
-              onClick={() => onPressedToggleProfileDropDown()}
-              className="relative w-[50px] h-[50px] overflow-hidden rounded-full hidden md:inline-block"
-            >
-              <Profile src={session.user.image!} />
-            </div>
-          </>
+            <button className="md:hidden inline-block">
+              <CiMenuBurger size={40} className="text-stone-100" />
+            </button>
+          </section>
+          <div
+            onClick={() => onPressedToggleProfileDropDown()}
+            className="relative w-[50px] h-[50px] overflow-hidden rounded-full hidden md:inline-block"
+          >
+            <Profile src={session!.user.image!} />
+          </div>
         </nav>
       )}
     </section>

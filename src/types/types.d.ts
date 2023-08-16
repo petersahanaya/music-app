@@ -4,10 +4,14 @@ type ReactChild = {
   children: React.ReactNode;
 };
 
+type ReactClass = {
+  className?: string;
+};
+
 type ReactClassName = {
   className?: string;
 } & ReactChild;
 
 type SessionProps = {
-  session : Session
-}
+  session: Session;
+};

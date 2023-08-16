@@ -30,6 +30,10 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
     shuffle: false,
   });
 
+  const onPressedChangeLoadHistory = useRecentlyPlayed(
+    (state) => state.onLoadSetHistoryMusic
+  );
+
   const [time, setTime] = useState({
     currentTime: 0,
     duration: 0,
@@ -37,7 +41,9 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const onPressedSortRecentlyPlaying = useRecentlyPlayed((state) => state.onPressedSortPlaying)
+  const onPressedSortRecentlyPlaying = useRecentlyPlayed(
+    (state) => state.onPressedSortPlaying
+  );
 
   const listOfMusic = useAudio((state) => state.track.listOfMusic);
 
@@ -58,9 +64,25 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
         type: TrackType.SetCurrentMusic,
       });
 
-      onPressedSortRecentlyPlaying(prevMusic as Music)
+      onPressedChangeLoadHistory(
+        [
+          prevMusic as Music,
+          ...listOfMusic
+            .filter((musicc) => musicc.id !== prevMusic.id)
+            .slice(0, 4),
+        ].slice(0, 4)
+      );
+
+      onPressedSortRecentlyPlaying(prevMusic as Music);
     }
-  }, [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeTrack, onPressedSortRecentlyPlaying]);
+  }, [
+    listOfMusic,
+    musicUrl,
+    onPressedChangeAudio,
+    onPressedChangeLoadHistory,
+    onPressedChangeTrack,
+    onPressedSortRecentlyPlaying,
+  ]);
 
   const onPressedChangeToNext = useCallback(() => {
     const nextMusic = trackingMusic(musicUrl, "next", listOfMusic);
@@ -74,9 +96,24 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
         type: TrackType.SetCurrentMusic,
       });
 
-      onPressedSortRecentlyPlaying(nextMusic as Music)
+      onPressedChangeLoadHistory(
+        [
+          nextMusic as Music,
+          ...listOfMusic
+            .filter((musicc) => musicc.id !== nextMusic.id)
+            .slice(0, 4),
+        ].slice(0, 4)
+      );
+      onPressedSortRecentlyPlaying(nextMusic as Music);
     }
-  }, [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeTrack, onPressedSortRecentlyPlaying]);
+  }, [
+    listOfMusic,
+    musicUrl,
+    onPressedChangeAudio,
+    onPressedChangeLoadHistory,
+    onPressedChangeTrack,
+    onPressedSortRecentlyPlaying,
+  ]);
 
   const onDragChangeVolume = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const seekValue = parseFloat(e.target.value);
@@ -135,6 +172,16 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
             listOfMusic: [],
             type: TrackType.SetCurrentMusic,
           });
+
+          onPressedChangeLoadHistory(
+            [
+              nextMusic as Music,
+              ...listOfMusic
+                .filter((musicc) => musicc.id !== nextMusic.id)
+                .slice(0, 4),
+            ].slice(0, 4)
+          );
+          onPressedSortRecentlyPlaying(nextMusic as Music);
         } else {
           setState((prev) => ({ ...prev, play: false }));
         }

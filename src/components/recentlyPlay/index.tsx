@@ -23,11 +23,9 @@ const RecentlyPlay = ({ listOfMusic }: RecentlyPlayProps) => {
   const historyMusic = useRecentlyPlayed((state) => state.historyMusic);
 
   useEffect(() => {
-    if (listOfMusic.length) {
-      onLoadSetAudio(listOfMusic);
-      setLoading(false);
-    }
-  }, [historyMusic.length, listOfMusic, onLoadSetAudio]);
+    onLoadSetAudio(listOfMusic);
+    setLoading(false);
+  }, []);
 
   return (
     <>

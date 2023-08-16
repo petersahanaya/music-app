@@ -11,11 +11,11 @@ type CardsProps = {
   listOfMusic: Music[];
   className?: string;
   heading: string;
+  link: "/music" | "/history" | "/favorite";
   type?: "history";
 };
 
-const Cards = ({ listOfMusic, heading, className, type }: CardsProps) => {
-
+const Cards = ({ listOfMusic, heading, className, type, link }: CardsProps) => {
   return (
     <main
       className={twMerge(
@@ -25,7 +25,7 @@ const Cards = ({ listOfMusic, heading, className, type }: CardsProps) => {
       <section className="w-full flex justify-between items-center">
         <h3 className="text-3xl capitalize text-white font-[700]">{heading}</h3>
 
-        <Link href="/music">
+        <Link href={link}>
           <p className="text-stone-400 hover:underline text-sm md:text-xl pr-3">
             see all
           </p>
@@ -34,9 +34,7 @@ const Cards = ({ listOfMusic, heading, className, type }: CardsProps) => {
 
       <section className="w-full h-full">
         {type === "history" ? (
-          <RecentlyPlay
-            listOfMusic={listOfMusic}
-          />
+          <RecentlyPlay listOfMusic={listOfMusic} />
         ) : (
           listOfMusic.length && (
             <>

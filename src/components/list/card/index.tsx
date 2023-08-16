@@ -9,7 +9,6 @@ import { useSession } from "next-auth/react";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { parsedUrl } from "@/lib/functions/parsedUrl";
 import { useCallback } from "react";
-import { useRouter } from "next/navigation";
 import { useRecentlyPlayed } from "@/state/store/history";
 
 type CardProps = {
@@ -53,10 +52,12 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
         type: TrackType.Default,
       });
 
-      // onPressedChangeLoadHistory([
-      //   music,
-      //   ...listOfMusic.filter((musicc) => musicc.id !== music.id),
-      // ]);
+      onPressedChangeLoadHistory(
+        [
+          music,
+          ...listOfMusic.filter((musicc) => musicc.id !== music.id).slice(0, 4),
+        ].slice(0, 4)
+      );
 
       onPressedSortPlaying(music);
 
@@ -81,6 +82,7 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
     music,
     onPressedAlertUnAuthenticate,
     onPressedChangeAudioSrc,
+    onPressedChangeLoadHistory,
     onPressedChangeTrack,
     onPressedSortPlaying,
     session,

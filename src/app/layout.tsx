@@ -4,13 +4,13 @@ import { authOptions } from "@auth/route";
 import "./globals.css";
 
 import Sidebar from "@component/sidebar";
-import Header from "@component/header";
 import SessionProvider from "@component/sessionProvider";
 import AlertJoin from "@component/alert/join";
 import ProfileDropDown from "@component/dropdown/profile";
 import PostDropDown from "@component/dropdown/post";
 import AudioProvider from "@component/audioPlayer/audioProvider";
-import AlertUnAuthenticated from "@/components/alert/unauthenticate";
+import AlertUnAuthenticated from "@component/alert/unauthenticate";
+import AuthDropDown from "@component/dropdown/auth";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
@@ -35,6 +35,7 @@ export default async function RootLayout({
           <AlertUnAuthenticated />
           <main className="w-screen h-screen flex flex-col md:flex-row items-center justify-between md:pt-2 overflow-hidden">
             <Sidebar />
+            <AuthDropDown />
             <div className="w-[19%] h-full hidden md:inline-block"></div>
             {children}
             <AlertJoin session={session!} />

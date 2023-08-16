@@ -57,11 +57,11 @@ const Discover = async () => {
 
   const [listOfMusic, historyMusic] = await Promise.all([
     getMusic({ take: 12, type: "" }),
-    getMusic({ take: 5, type: "history" }),
+    getMusic({ take: 4, type: "history" }),
   ]);
 
   return (
-    <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl pb-32 overflow-y-scroll">
+    <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll  pb-32">
       <Header />
 
       <MainContent
@@ -74,3 +74,4 @@ const Discover = async () => {
 };
 
 export default Discover;
+

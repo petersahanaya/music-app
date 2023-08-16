@@ -22,7 +22,7 @@ model User {
   History  Music[] @relation("history")
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Music {
@@ -46,5 +46,5 @@ model Music {
   authorId String?
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }

@@ -14,10 +14,9 @@ export async function GET(req: Request) {
   const search = searchParams.get("q");
 
   const album = searchParams.get("album");
+  const favorite = searchParams.get("favorite");
   const genre = searchParams.get("genre");
   const type = searchParams.get("type") as "history" | "";
-
-  console.log(type);
 
   try {
     if (genre) {
@@ -30,6 +29,33 @@ export async function GET(req: Request) {
       });
 
       return NextResponse.json({ listOfMusic });
+    }
+
+    if (favorite) {
+      const session = await getServerSession(authOptions);
+
+      if (!session || !session.user) {
+        return NextResponse.json(
+          { message: "UnAuthorized User." },
+          { status: 403 }
+        );
+      }
+
+      const listOfFavorite = await prisma.user.findUnique({
+        where: {
+          userId: session.user.userId as string,
+        },
+        include: {
+          Favorite: {
+            take: Number(take) || 8,
+            skip: Number(offset) || 0,
+          },
+        },
+      });
+
+      return NextResponse.json({
+        listOfFavorite: listOfFavorite ? listOfFavorite.Favorite : [],
+      });
     }
 
     if (album) {
@@ -57,7 +83,7 @@ export async function GET(req: Request) {
         },
       });
 
-      return NextResponse.json({ albums: myAlbums });
+      return NextResponse.json({ listOfAlbum: myAlbums ? myAlbums.Album : [] });
     }
 
     if (search) {
@@ -138,7 +164,12 @@ export async function GET(req: Request) {
           },
         },
         include: {
-          History: true,
+          History: {
+            take: Number(take) || 5,
+            orderBy: {
+              updatedAt: "asc",
+            },
+          },
         },
         take: Number(take) || 5,
         skip: Number(offset) || 0,
@@ -165,19 +196,6 @@ export async function GET(req: Request) {
     return NextResponse.json({ message: e }, { status: 500 });
   }
 }
-
-/*
-            History: true,
-          username: false,
-          userId: false,
-          updatedAt: false,
-          Album: false,
-          createdAt: false,
-          email: false,
-          Favorite: false,
-          id: false,
-          profile: false,
-*/
 
 export async function PATCH(req: Request) {
   console.log("TRIGGER UPDATE");
