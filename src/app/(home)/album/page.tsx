@@ -6,18 +6,18 @@ import { headers } from "next/headers";
 import { Music } from "@prisma/client";
 import Cards from "@component/list/cards";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@auth/route";
 import AlertSign from "@component/alert/signIn";
+import Detail from "@component/detail";
 
 export type getMusicParams = {
-  take: number;
   searchParams: {
     key: string;
     value: string;
   }[];
 };
 
-const getMusicAlbum = async ({ take, searchParams }: getMusicParams) => {
+export const getMusicAlbum = async ({ searchParams }: getMusicParams) => {
   const url = parsedUrl({
     path: "api/song",
     searchParams,
@@ -60,14 +60,14 @@ const Album = async () => {
   }
 
   const listOfAlbum = await getMusicAlbum({
-    take: 8,
-    searchParams: [{ key: "album", value: "album" }],
+    searchParams: [
+      { key: "album", value: "album" },
+      { key: "take", value: String(8) },
+    ],
   });
 
   return (
-    <div className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll  pb-32">
-      <Header />
-
+    <div className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll pb-32">
       {!listOfAlbum.length && (
         <Center className="flex-col">
           <h4 className="text-3xl text-stone-200 font-[700]">
@@ -83,9 +83,12 @@ const Album = async () => {
       )}
 
       {listOfAlbum.length && (
-        <section className="w-full h-full mt-32 px-3">
-          <Cards heading="My Album" listOfMusic={listOfAlbum} link="/music" />
-        </section>
+        <Detail
+          title="My Albums"
+          views={`${listOfAlbum.reduce((a, b) => b.views + 0, 0)} total views`}
+          largeImage={listOfAlbum[1].largeImage}
+          listOfMusic={listOfAlbum}
+        />
       )}
     </div>
   );

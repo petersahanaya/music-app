@@ -14,7 +14,7 @@ export type getMusicParam = {
   type: "history" | "";
 };
 
-const getMusic = async ({ take, type }: getMusicParam) => {
+export const getMusic = async ({ take, type }: getMusicParam) => {
   const url = parsedUrl({
     path: "api/song",
     searchParams: [
@@ -74,4 +74,3 @@ const Discover = async () => {
 };
 
 export default Discover;
-

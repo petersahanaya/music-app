@@ -7,9 +7,11 @@ import { TrackType, useAudio } from "@state/store/audio";
 import { useAlertUnAuthenticate } from "@state/store/alert";
 import { useSession } from "next-auth/react";
 import { FaPlay, FaPause } from "react-icons/fa";
-import { parsedUrl } from "@/lib/functions/parsedUrl";
-import { useCallback } from "react";
-import { useRecentlyPlayed } from "@/state/store/history";
+import { parsedUrl } from "@lib/functions/parsedUrl";
+import { MouseEvent, useCallback } from "react";
+import { useRecentlyPlayed } from "@state/store/history";
+import { redirect, useRouter } from "next/navigation";
+import Link from "next/link";
 
 type CardProps = {
   music: Music;
@@ -19,6 +21,8 @@ type CardProps = {
 
 const Card = ({ listOfMusic, music, className }: CardProps) => {
   const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
+
+  const router = useRouter();
 
   const onPressedSortPlaying = useRecentlyPlayed(
     (state) => state.onPressedSortPlaying
@@ -88,9 +92,17 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
     session,
   ]);
 
+  const onPressedRedirectToTrack = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    console.log("CLICKED");
+
+    router.push(`/track/${music.id}`);
+  };
+
   return (
     <>
       <article
+        onClick={onPressedRedirectToTrack}
         className={twMerge(
           `w-full h-[300px] cursor-pointer bg-[#232323] hover:bg-white/20 transition-colors rounded-md p-3 group ${className} flex flex-col justify-start items-center gap-4`
         )}

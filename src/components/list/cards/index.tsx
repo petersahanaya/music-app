@@ -11,7 +11,7 @@ type CardsProps = {
   listOfMusic: Music[];
   className?: string;
   heading: string;
-  link: "/music" | "/history" | "/favorite";
+  link: string;
   type?: "history";
 };
 

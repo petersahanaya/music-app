@@ -9,10 +9,11 @@ import { headers } from "next/headers";
 import { parsedUrl } from "@lib/functions/parsedUrl";
 import { Music } from "@prisma/client";
 import Cards from "@component/list/cards";
+import Detail from "@/components/detail";
 
-const getFavoriteMusic = async ({ searchParams, take }: getMusicParams) => {
+const getFavoriteMusic = async ({ searchParams}: getMusicParams) => {
   const url = parsedUrl({
-    path: "api/song",
+    path: `api/song`,
     searchParams,
   });
 
@@ -45,8 +46,7 @@ const getFavoriteMusic = async ({ searchParams, take }: getMusicParams) => {
 
 const FavoritePage = async () => {
   const listOfFavorite = await getFavoriteMusic({
-    take: 8,
-    searchParams: [{ key: "favorite", value: "favorite" }],
+    searchParams: [{ key: "favorite", value: "favorite" }, {key : "take", value : String(8)}],
   });
 
   const session = await getServerSession(authOptions);
@@ -62,8 +62,6 @@ const FavoritePage = async () => {
 
   return (
     <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll  pb-32">
-      <Header />
-
       {!listOfFavorite.length && (
         <Center className="flex-col">
           <h4 className="text-3xl text-stone-200 font-[700]">
@@ -79,9 +77,13 @@ const FavoritePage = async () => {
       )}
 
       {listOfFavorite.length && (
-        <Cards
-          heading="My Favorite"
-          link="/favorite"
+        <Detail
+          title="My Favorite"
+          views={`${listOfFavorite.reduce(
+            (a, b) => b.views + 0,
+            0
+          )} total views`}
+          largeImage={listOfFavorite[1].largeImage}
           listOfMusic={listOfFavorite}
         />
       )}

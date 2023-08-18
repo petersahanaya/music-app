@@ -2,7 +2,6 @@ import { prisma } from "@lib/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "@auth/route";
-import { ConvertObjectId } from "@lib/functions/converter";
 
 export async function GET(req: Request) {
   const url = req.url;
@@ -16,6 +15,7 @@ export async function GET(req: Request) {
   const album = searchParams.get("album");
   const favorite = searchParams.get("favorite");
   const genre = searchParams.get("genre");
+  const songId = searchParams.get("songId");
   const type = searchParams.get("type") as "history" | "";
 
   try {
@@ -56,6 +56,30 @@ export async function GET(req: Request) {
       return NextResponse.json({
         listOfFavorite: listOfFavorite ? listOfFavorite.Favorite : [],
       });
+    }
+
+    if (songId) {
+      const song = await prisma.music.findUnique({
+        where: {
+          id: songId,
+        },
+        include: {
+          author: {
+            select: {
+              profile: true,
+              username: true,
+              userId: true,
+            },
+          },
+          favorite: {
+            select: {
+              userId: true,
+            },
+          },
+        },
+      });
+
+      return NextResponse.json({ song });
     }
 
     if (album) {
@@ -143,6 +167,18 @@ export async function GET(req: Request) {
       });
 
       return NextResponse.json({ albums: myAlbums });
+    }
+
+    if (genre) {
+      const listOfMusic = await prisma.music.findMany({
+        where: {
+          genre,
+        },
+        take: Number(take) || 4,
+        skip: Number(offset) || 0,
+      });
+
+      return NextResponse.json({listOfMusic})
     }
 
     if (type === "history") {
