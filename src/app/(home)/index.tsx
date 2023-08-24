@@ -3,6 +3,7 @@
 import { Music } from "@prisma/client";
 import Cards from "@component/list/cards";
 import { Session } from "next-auth";
+import Footer from "@/components/footer";
 
 type MainContentProps = {
   listOfMusic: Music[];
@@ -16,26 +17,24 @@ const MainContent = ({
   session,
 }: MainContentProps) => {
   return (
-    <main className="w-full h-full">
+    <main className="w-full h-max bg-stone-900 rounded-bl-2xl">
       {session && session.user && (
         <section className="w-full">
           <Cards
             heading="Recently Played"
             listOfMusic={historyMusic}
-            className="mt-32 px-3 pb-3 "
+            className="px-3 pb-3 "
             type="history"
             link="/history"
           />
         </section>
       )}
-      <section className="w-full h-full">
+      <section className="w-full h-full mt-8">
         <Cards
           heading="New Trending"
           listOfMusic={listOfMusic}
-          className={`px-3 pb-12 ${
-            !session || !session.user ? "mt-0" : "mt-32"
-          }`}
-          link="/music"
+          className={`px-3 pb-12 ${!session || !session.user ? "mt-0" : ""}`}
+          link="/songs"
         />
       </section>
     </main>

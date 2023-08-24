@@ -12,15 +12,24 @@ import { parsedUrl } from "@lib/functions/parsedUrl";
 import { TrackType, useAudio } from "@state/store/audio";
 import { useRecentlyPlayed } from "@state/store/history";
 import { useCallback } from "react";
+import { Session } from "next-auth";
+import useLoader from "@/state/hooks/useLoader";
 
 type DetailProps = {
   title: string;
   views: string;
   largeImage: string;
+  session: Session;
   listOfMusic: Music[];
 };
 
-const Detail = ({ listOfMusic, title, views, largeImage }: DetailProps) => {
+const Detail = ({
+  listOfMusic,
+  title,
+  views,
+  largeImage,
+  session,
+}: DetailProps) => {
   const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
 
   const onPressedSortPlaying = useRecentlyPlayed(
@@ -81,8 +90,8 @@ const Detail = ({ listOfMusic, title, views, largeImage }: DetailProps) => {
   ]);
 
   return (
-    <main className="w-full h-full bg-stone-900 md:rounded-2xl ">
-      <section className="w-full h-[300px] relative">
+    <main className="w-full h-max bg-stone-900 md:rounded-2xl">
+      <section className="w-full h-[300px] relative rounded-tl-2xl overflow-hidden">
         <Image
           className="object-cover"
           src={largeImage}
@@ -125,7 +134,7 @@ const Detail = ({ listOfMusic, title, views, largeImage }: DetailProps) => {
           {listOfMusic.map((music, idx) => (
             <MusicList
               key={idx}
-              favorite
+              favorite={music.favoriteId === session.user.userId}
               music={music}
               listOfMusic={listOfMusic}
               coverImage={music.coverImage}

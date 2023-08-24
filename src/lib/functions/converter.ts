@@ -45,6 +45,7 @@ export async function CloudinaryUploadFile(file: File) {
 }
 
 export function ConvertObjectId(hex: string) {
+  console.log("HEX LENGTH : ", hex.length);
   const objectId = new ObjectId(hex);
   console.log(objectId.id);
 

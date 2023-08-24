@@ -14,6 +14,7 @@ import { usePostDropDown } from "@state/store/post";
 import { fadeUpAnimate } from "@animation/fade";
 import { popUpAnimate } from "@animation/popup";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 const ProfileDropDown = ({ session }: SessionProps) => {
   const stateProfile = useToggleProfile();
@@ -69,13 +70,17 @@ const ProfileDropDown = ({ session }: SessionProps) => {
               <div>
                 <ListTile className="hover:opacity-70 transition-opacity">
                   <AiOutlineHeart size={30} />
-                  <p className="text-sm text-stone-700">My Album</p>
+                  <Link href="/album" className="text-sm text-stone-700">
+                    My Album
+                  </Link>
                 </ListTile>
               </div>
               <div>
                 <ListTile className="hover:opacity-70 transition-opacity">
                   <CiSettings size={30} />
-                  <p className="text-sm text-stone-700">Settings</p>
+                  <Link href="/profile" className="text-sm text-stone-700">
+                    Settings
+                  </Link>
                 </ListTile>
               </div>
             </motion.section>

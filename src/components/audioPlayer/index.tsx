@@ -160,7 +160,6 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
       } else {
         setState((prev) => ({ ...prev, play: false }));
       }
-
       if (state.shuffle) {
         const nextMusic = trackingMusic(musicUrl, "next", listOfMusic);
 

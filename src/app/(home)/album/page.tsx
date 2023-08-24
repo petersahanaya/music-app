@@ -1,4 +1,3 @@
-import Header from "@component/header";
 import Center from "@component/center";
 import Link from "next/link";
 import { parsedUrl } from "@lib/functions/parsedUrl";
@@ -9,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@auth/route";
 import AlertSign from "@component/alert/signIn";
 import Detail from "@component/detail";
+import Footer from "@component/footer";
 
 export type getMusicParams = {
   searchParams: {
@@ -67,7 +67,7 @@ const Album = async () => {
   });
 
   return (
-    <div className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll pb-32">
+    <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl pb-32">
       {!listOfAlbum.length && (
         <Center className="flex-col">
           <h4 className="text-3xl text-stone-200 font-[700]">
@@ -84,13 +84,16 @@ const Album = async () => {
 
       {listOfAlbum.length && (
         <Detail
+          session={session}
           title="My Albums"
           views={`${listOfAlbum.reduce((a, b) => b.views + 0, 0)} total views`}
           largeImage={listOfAlbum[1].largeImage}
           listOfMusic={listOfAlbum}
         />
       )}
-    </div>
+
+      <Footer />
+    </main>
   );
 };
 

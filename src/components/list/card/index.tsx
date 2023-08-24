@@ -10,8 +10,8 @@ import { FaPlay, FaPause } from "react-icons/fa";
 import { parsedUrl } from "@lib/functions/parsedUrl";
 import { MouseEvent, useCallback } from "react";
 import { useRecentlyPlayed } from "@state/store/history";
-import { redirect, useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useLoaderUI } from "@state/store/loading";
 
 type CardProps = {
   music: Music;
@@ -94,7 +94,6 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
 
   const onPressedRedirectToTrack = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    console.log("CLICKED");
 
     router.push(`/track/${music.id}`);
   };

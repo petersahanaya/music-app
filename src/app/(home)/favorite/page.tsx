@@ -11,7 +11,7 @@ import { Music } from "@prisma/client";
 import Cards from "@component/list/cards";
 import Detail from "@/components/detail";
 
-const getFavoriteMusic = async ({ searchParams}: getMusicParams) => {
+const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
   const url = parsedUrl({
     path: `api/song`,
     searchParams,
@@ -46,7 +46,10 @@ const getFavoriteMusic = async ({ searchParams}: getMusicParams) => {
 
 const FavoritePage = async () => {
   const listOfFavorite = await getFavoriteMusic({
-    searchParams: [{ key: "favorite", value: "favorite" }, {key : "take", value : String(8)}],
+    searchParams: [
+      { key: "favorite", value: "favorite" },
+      { key: "take", value: String(8) },
+    ],
   });
 
   const session = await getServerSession(authOptions);
@@ -78,12 +81,13 @@ const FavoritePage = async () => {
 
       {listOfFavorite.length && (
         <Detail
+          session={session}
           title="My Favorite"
           views={`${listOfFavorite.reduce(
             (a, b) => b.views + 0,
             0
           )} total views`}
-          largeImage={listOfFavorite[1].largeImage}
+          largeImage={listOfFavorite[0].largeImage}
           listOfMusic={listOfFavorite}
         />
       )}

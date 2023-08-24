@@ -105,13 +105,6 @@ const Sidebar = () => {
           </ListTile>
         </Link>
       </main>
-
-      <main className="w-[80%] h-max flex justify-around items-between flex-wrap gap-8 mt-8 p-2">
-        <p className="text-stone-400 text-sm">Legal</p>
-        <p className="text-stone-400 text-sm">Privacy Center</p>
-        <p className="text-stone-400 text-sm">Privacy Policy</p>
-        <p className="text-stone-400 text-sm">Cookies</p>
-      </main>
     </aside>
   );
 };

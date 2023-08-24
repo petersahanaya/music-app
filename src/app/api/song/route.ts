@@ -16,7 +16,13 @@ export async function GET(req: Request) {
   const favorite = searchParams.get("favorite");
   const genre = searchParams.get("genre");
   const songId = searchParams.get("songId");
-  const type = searchParams.get("type") as "history" | "";
+  const popular = searchParams.get("popular");
+  const news = searchParams.get("new");
+
+  console.log("NEWS", news);
+  console.log("POPULAR", popular);
+
+  const type = searchParams.get("type") as "history" | "like" | "";
 
   try {
     if (genre) {
@@ -178,7 +184,7 @@ export async function GET(req: Request) {
         skip: Number(offset) || 0,
       });
 
-      return NextResponse.json({listOfMusic})
+      return NextResponse.json({ listOfMusic });
     }
 
     if (type === "history") {
@@ -216,6 +222,30 @@ export async function GET(req: Request) {
       });
     }
 
+    if (news) {
+      const listOfMusic = await prisma.music.findMany({
+        skip: Number(offset) || 0,
+        take: Number(take) || 20,
+        orderBy: {
+          createdAt: news ? "desc" : "asc",
+        },
+      });
+
+      return NextResponse.json({ listOfMusic });
+    }
+
+    if (popular) {
+      const listOfMusic = await prisma.music.findMany({
+        skip: Number(offset) || 0,
+        take: Number(take) || 20,
+        orderBy: {
+          views: popular ? "desc" : "asc",
+        },
+      });
+
+      return NextResponse.json({ listOfMusic });
+    }
+
     const listOfMusic = await prisma.music.findMany({
       skip: Number(offset) || 0,
       take: Number(take) || 20,
@@ -234,8 +264,6 @@ export async function GET(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-  console.log("TRIGGER UPDATE");
-
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {

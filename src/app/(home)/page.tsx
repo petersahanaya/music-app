@@ -5,6 +5,7 @@ import MainContent from ".";
 import { parsedUrl } from "@lib/functions/parsedUrl";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@auth/route";
+import Footer from "@component/footer";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
@@ -61,7 +62,7 @@ const Discover = async () => {
   ]);
 
   return (
-    <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll  pb-32">
+    <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl pb-32">
       <Header />
 
       <MainContent
@@ -69,6 +70,8 @@ const Discover = async () => {
         historyMusic={historyMusic}
         listOfMusic={listOfMusic}
       />
+
+      <Footer />
     </main>
   );
 };

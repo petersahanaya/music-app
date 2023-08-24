@@ -17,8 +17,11 @@ import Link from "next/link";
 import { Music } from "@prisma/client";
 import { TrackType, useAudio } from "@state/store/audio";
 import { useRecentlyPlayed } from "@state/store/history";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { parsedUrl } from "@lib/functions/parsedUrl";
+import { Session } from "next-auth";
+import { useRouter } from "next/navigation";
+import LoaderIcon from "@component/icons/loader";
 
 type SongDetailProps = {
   title: string;
@@ -28,6 +31,7 @@ type SongDetailProps = {
   userProfileHref: string;
   favorite: boolean;
   lyrics: string;
+  session: Session | null;
   listOfMusic: Music[];
   listOfAlsoLike: Music[];
   song: Music;
@@ -44,7 +48,12 @@ const SongDetail = ({
   listOfMusic,
   listOfAlsoLike,
   song,
+  session,
 }: SongDetailProps) => {
+  const router = useRouter();
+
+  const [loader, setLoader] = useState(false);
+
   const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
 
   const onPressedSortPlaying = useRecentlyPlayed(
@@ -96,12 +105,45 @@ const SongDetail = ({
     } catch (e: unknown) {
       console.error(e);
     }
-  }, [listOfMusic, onPressedChangeAudioSrc, onPressedChangeLoadHistory, onPressedChangeTrack, onPressedSortPlaying, song]);
+  }, [
+    listOfMusic,
+    onPressedChangeAudioSrc,
+    onPressedChangeLoadHistory,
+    onPressedChangeTrack,
+    onPressedSortPlaying,
+    song,
+  ]);
+
+  const onPressedToggleFavorite = useCallback(async () => {
+    setLoader(true);
+    const url = parsedUrl({
+      path: "api/favorite",
+      searchParams: [
+        { key: "songId", value: song.id },
+        { key: "favorite", value: "favorite" },
+        { key: "type", value: "like" },
+      ],
+    });
+
+    const resp = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (resp.ok) {
+      setLoader(false);
+      router.refresh();
+    }
+
+    const data = await resp.json();
+  }, [router, song.id]);
 
   return (
-    <main className="w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll">
+    <main className="w-full h-max bg-stone-900  md:rounded-2xl">
       <section className="w-full h-[300px] relative">
-        <div className="w-full h-full bg-gradient-to-b from-green-600 to-green-600/10 absolute top-0 left-0"></div>
+        <div className="w-full h-full bg-gradient-to-b from-green-600 to-green-600/10 absolute top-0 left-0 rounded-md"></div>
         <section className="absolute bottom-[30px] left-[20px] w-full flex justify-start items-center gap-3">
           <div className="w-[200px] h-[200px] relative backdrop:shadow-md rounded-md overflow-hidden">
             <Image
@@ -149,8 +191,10 @@ const SongDetail = ({
             )}
           </Button>
 
-          <button className="">
-            {favorite ? (
+          <button onClick={onPressedToggleFavorite} className="">
+            {loader ? (
+              <LoaderIcon color="#414141" size={30} className="animate-spin" />
+            ) : favorite ? (
               <AiFillHeart
                 size={35}
                 className="text-red-500 hover:opacity-70 transition-opacity"
@@ -207,7 +251,7 @@ const SongDetail = ({
                 <MusicList
                   key={idx}
                   coverImage={music.coverImage}
-                  favorite
+                  favorite={music.favoriteId === session?.user.userId}
                   listOfMusic={listOfMusic}
                   music={music}
                   number={idx + 1}

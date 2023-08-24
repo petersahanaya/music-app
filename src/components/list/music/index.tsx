@@ -5,10 +5,12 @@ import { useRecentlyPlayed } from "@state/store/history";
 import { TrackType, useAudio } from "@state/store/audio";
 import { Music } from "@prisma/client";
 import Image from "next/image";
-import { MouseEvent, useCallback } from "react";
+import { MouseEvent, useCallback, useState } from "react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { FaPlay, FaPause } from "react-icons/fa";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import LoaderIcon from "@component/icons/loader";
+import Link from "next/link";
 
 type MusicListProps = {
   number: number;
@@ -30,6 +32,8 @@ const MusicList = ({
   favorite,
 }: MusicListProps) => {
   const router = useRouter();
+
+  const [loader, setLoader] = useState(false);
 
   const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
 
@@ -95,6 +99,33 @@ const MusicList = ({
     router.push(`/track/${music.id}`);
   };
 
+  const onPressedToggleLike = useCallback(async () => {
+    setLoader(true);
+
+    const url = parsedUrl({
+      path: "api/favorite",
+      searchParams: [
+        { key: "songId", value: music.id },
+        { key: "favorite", value: "favorite" },
+        { key: "type", value: "like" },
+      ],
+    });
+
+    const resp = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (resp.ok) {
+      setLoader(false);
+      router.refresh();
+    }
+
+    const data = await resp.json();
+  }, [music.id, router]);
+
   return (
     <article
       onClick={onPressedRedirect}
@@ -130,14 +161,22 @@ const MusicList = ({
             alt="cover image"
           />
         </div>
-        <p className="text-stone-200 capitalize font-[500] hover:underline max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis">
+        <Link
+          href={`/track/${music.id}`}
+          className="text-stone-200 capitalize font-[500] hover:underline max-w-[200px] whitespace-nowrap overflow-hidden text-ellipsis"
+        >
           {title}
-        </p>
+        </Link>
       </section>
 
       <section className="text-stone-500 text-sm flex justify-start items-center gap-4">
-        <button className="group-hover:opacity-100 opacity-0 transition-opacity">
-          {favorite ? (
+        <button
+          onClick={onPressedToggleLike}
+          className="group-hover:opacity-100 opacity-0 transition-opacity"
+        >
+          {loader ? (
+            <LoaderIcon size={20} color="#747474" className="animate-spin" />
+          ) : favorite ? (
             <AiFillHeart className="text-red-600" size={20} />
           ) : (
             <AiOutlineHeart className="text-white" size={20} />

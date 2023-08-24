@@ -99,12 +99,18 @@ const Path = ({ session }: PathProps) => {
             <Link href="/search">
               <BiSearch size={30} className="text-stone-200 ml-10" />
             </Link>
-            <p role="button" className="text-stone-200 hidden md:inline-block">
+            <Link
+              href="/songs?news=true"
+              className="text-stone-200 hidden md:inline-block hover:underline"
+            >
               New Releases
-            </p>
-            <p role="button" className="text-stone-200 hidden md:inline-block">
+            </Link>
+            <Link
+              href="/songs?popular=true"
+              className="text-stone-200 hidden md:inline-block hover:underline"
+            >
               Popular
-            </p>
+            </Link>
 
             <button className="md:hidden inline-block">
               <CiMenuBurger size={40} className="text-stone-100" />
