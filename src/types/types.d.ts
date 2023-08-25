@@ -15,3 +15,5 @@ type ReactClassName = {
 type SessionProps = {
   session: Session;
 };
+
+type UnArray<T> = T extends Array<infer J> ? J : T;

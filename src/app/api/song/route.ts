@@ -19,10 +19,7 @@ export async function GET(req: Request) {
   const popular = searchParams.get("popular");
   const news = searchParams.get("new");
 
-  console.log("NEWS", news);
-  console.log("POPULAR", popular);
-
-  const type = searchParams.get("type") as "history" | "like" | "";
+  const type = searchParams.get("type") as "history" | "like" | "search" | "";
 
   try {
     if (genre) {
@@ -116,31 +113,34 @@ export async function GET(req: Request) {
       return NextResponse.json({ listOfAlbum: myAlbums ? myAlbums.Album : [] });
     }
 
-    if (search) {
+    if (search || type === "search") {
       const listOfMusic = await prisma.music.findMany({
         where: {
           title: {
-            contains: search.toLowerCase(),
+            contains: search ? search.toLowerCase() : "",
             mode: "insensitive",
           },
         },
       });
 
-      return NextResponse.json({ music: listOfMusic });
+      return NextResponse.json({ listOfMusic: listOfMusic || [] });
     }
 
-    if (search && genre) {
+    if (search || genre || type.includes("search")) {
       const listOfMusic = await prisma.music.findMany({
         where: {
           title: {
-            contains: search.toLowerCase(),
+            contains: search ? search.toLowerCase() : "",
             mode: "insensitive",
           },
-          genre,
+          genre: {
+            contains: genre ? genre.toLowerCase() : "",
+            mode: "insensitive",
+          },
         },
       });
 
-      return NextResponse.json({ music: listOfMusic });
+      return NextResponse.json({ listOfMusic: listOfMusic || [] });
     }
 
     if (album && genre) {

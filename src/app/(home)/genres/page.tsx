@@ -92,7 +92,11 @@ const Genres = async ({ params, searchParams }: GenreParams) => {
     <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl  pb-32">
       {!searchParams.genre && <Header />}
 
-      <section className={`w-full h-max md:rounded-2xl `}>
+      <section
+        className={`w-full md:rounded-2xl ${
+          !listOfMusic.length ? "h-full" : "h-max"
+        }`}
+      >
         {!searchParams.genre && (
           <ListView className="px-3">
             {listOfGenre.map((genre, idx) => (

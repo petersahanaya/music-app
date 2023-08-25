@@ -96,7 +96,7 @@ const Path = ({ session }: PathProps) => {
       {path === "/" && session && session.user && (
         <nav className="flex justify-start items-center gap-3">
           <section className="flex justify-between md:justify-start items-center gap-7 pr-10">
-            <Link href="/search">
+            <Link href={`/search`}>
               <BiSearch size={30} className="text-stone-200 ml-10" />
             </Link>
             <Link

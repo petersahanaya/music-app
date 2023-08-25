@@ -8,7 +8,22 @@ const MAX_AUDIO_FILE_SIZE = MB * 10;
 
 const ACCEPTED_IMAGE_TYPE = ["image/jpg", "image/jpeg", "image/png"];
 const ACCEPTED_AUDIO_TYPE = ["audio/mpeg"];
-export const ACCEPTED_GENRE = ["pop", "rock", "mood", "hiphop", "chill"];
+export const ACCEPTED_GENRE = [
+  "pop",
+  "rock",
+  "mood",
+  "hiphop",
+  "chill",
+] as const;
+
+export const GENRES = [
+  "all",
+  "pop",
+  "rock",
+  "mood",
+  "hiphop",
+  "chill",
+] as const;
 
 export const schema = z.object({
   title: z
