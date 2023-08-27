@@ -21,8 +21,9 @@ export async function GET(req: Request) {
 
   const type = searchParams.get("type") as "history" | "like" | "search" | "";
 
+  console.log("GENRE", genre);
   try {
-    if (genre) {
+    if (genre && type !== "search") {
       const listOfMusic = await prisma.music.findMany({
         where: {
           genre,
@@ -113,34 +114,37 @@ export async function GET(req: Request) {
       return NextResponse.json({ listOfAlbum: myAlbums ? myAlbums.Album : [] });
     }
 
-    if (search || type === "search") {
-      const listOfMusic = await prisma.music.findMany({
-        where: {
-          title: {
-            contains: search ? search.toLowerCase() : "",
-            mode: "insensitive",
-          },
-        },
-      });
+    if (type === "search") {
 
-      return NextResponse.json({ listOfMusic: listOfMusic || [] });
-    }
-
-    if (search || genre || type.includes("search")) {
-      const listOfMusic = await prisma.music.findMany({
-        where: {
-          title: {
-            contains: search ? search.toLowerCase() : "",
-            mode: "insensitive",
+      if (!genre) {
+        const listOfMusic = await prisma.music.findMany({
+          where: {
+            title: {
+              contains: search ? search.toLowerCase() : "",
+              mode: "insensitive",
+            },
           },
-          genre: {
-            contains: genre ? genre.toLowerCase() : "",
-            mode: "insensitive",
-          },
-        },
-      });
+        });
 
-      return NextResponse.json({ listOfMusic: listOfMusic || [] });
+        return NextResponse.json({ listOfMusic: listOfMusic || [] });
+      }
+
+      if (genre) {
+        const listOfMusic = await prisma.music.findMany({
+          where: {
+            title: {
+              contains: search ? search.toLowerCase() : "",
+              mode: "insensitive",
+            },
+            genre: {
+              contains: genre ? genre.toLowerCase() : "",
+              mode: "insensitive",
+            },
+          },
+        });
+
+        return NextResponse.json({ listOfMusic: listOfMusic || [] });
+      }
     }
 
     if (album && genre) {
@@ -187,7 +191,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ listOfMusic });
     }
 
-    if (type === "history") {
+    if (type && type === "history") {
       const session = await getServerSession(authOptions);
 
       if (!session || !session.user) {

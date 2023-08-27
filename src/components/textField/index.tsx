@@ -25,7 +25,7 @@ const TextField = ({ hint, query, setQuery, className }: TextFieldProps) => {
   );
 
   return (
-    <div className="w-[300px] relative rounded-md">
+    <div className="w-[200px] xs:w-[300px] relative rounded-md">
       <GoSearch
         role="button"
         size={20}

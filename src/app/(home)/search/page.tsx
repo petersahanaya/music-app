@@ -55,6 +55,7 @@ const getMusicByQuery = async ({
 
 const SearchPage = async ({ params, searchParams }: SearchPageParams) => {
   const listOfMusic = await getMusicByQuery({ ...searchParams });
+  console.log({searchParams})
   const session = await getServerSession(authOptions);
 
   return (

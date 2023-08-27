@@ -123,7 +123,7 @@ const DetailSearch = ({ listOfMusic, q, session, g }: DetailSearchProps) => {
 
   return (
     <main className={`w-full h-max bg-stone-900 pb-14`}>
-      <header className="w-full p-3 px-8 border-b-[1px] border-b-stone-700 flex justify-between items-center">
+      <header className="w-full p-3 xs:px-8 border-b-[1px] border-b-stone-700 flex justify-between items-center">
         <TextField
           hint="Search for what you want"
           query={query}
@@ -138,7 +138,7 @@ const DetailSearch = ({ listOfMusic, q, session, g }: DetailSearchProps) => {
         </div>
       </header>
 
-      <article className="w-full flex justify-around items-center mt-3 px-3 gap-3">
+      <article className="w-full flex justify-around items-center flex-wrap mt-3 px-3 gap-3">
         {GENRES.map((genre, idx) => (
           <Button
             key={idx}
@@ -215,7 +215,7 @@ const DetailSearch = ({ listOfMusic, q, session, g }: DetailSearchProps) => {
               </h4>
 
               <nav className="w-full h-max rounded-md bg-stone-950 mt-4 flex flex-col gap-2">
-                {listOfMusic.map((music, idx) => (
+                {listOfMusic.slice(0, 8).map((music, idx) => (
                   <article key={idx}>
                     <section className="flex justify-start items-start gap-3 hover:bg-neutral-900 transition-all cursor-pointer p-2">
                       <div className="w-[40px] h-[40px] relative overflow-hidden">
