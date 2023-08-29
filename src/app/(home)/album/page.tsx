@@ -9,6 +9,7 @@ import { authOptions } from "@auth/route";
 import AlertSign from "@component/alert/signIn";
 import Detail from "@component/detail";
 import Footer from "@component/footer";
+import HeaderPhone from "@/components/sidebar/header";
 
 export type getMusicParams = {
   searchParams: {
@@ -68,6 +69,7 @@ const Album = async () => {
 
   return (
     <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl pb-32">
+      <HeaderPhone />
       {!listOfAlbum.length && (
         <Center className="flex-col">
           <h4 className="text-3xl text-stone-200 font-[700]">

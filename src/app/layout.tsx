@@ -12,7 +12,7 @@ import PostDropDown from "@component/dropdown/post";
 import AudioProvider from "@component/audioPlayer/audioProvider";
 import AlertUnAuthenticated from "@component/alert/unauthenticate";
 import AuthDropDown from "@component/dropdown/auth";
-import { ReactChild } from "@/types/types";
+import PhoneSidebar from "@/components/sidebar/phone";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ export default async function RootLayout({
           <main className="w-screen h-screen flex flex-col md:flex-row items-center justify-between md:pt-2 ">
             <Sidebar />
             <AuthDropDown />
+            <PhoneSidebar session={session} />
             <div className="w-[19%] h-full hidden md:inline-block"></div>
             {children}
             <AlertJoin session={session!} />

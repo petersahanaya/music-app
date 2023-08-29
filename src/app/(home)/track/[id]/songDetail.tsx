@@ -142,10 +142,10 @@ const SongDetail = ({
 
   return (
     <main className="w-full h-max bg-stone-900  md:rounded-2xl">
-      <section className="w-full h-[300px] relative">
+      <section className="w-full xs:h-[300px] h-[200px] relative">
         <div className="w-full h-full bg-gradient-to-b from-green-600 to-green-600/10 absolute top-0 left-0 rounded-md"></div>
         <section className="absolute bottom-[30px] left-[20px] w-full flex justify-start items-center gap-3">
-          <div className="w-[200px] h-[200px] relative backdrop:shadow-md rounded-md overflow-hidden">
+          <div className="w-[200px] h-[200px] hidden xs:inline-block relative backdrop:shadow-md rounded-md overflow-hidden">
             <Image
               className="object-cover"
               src={coverImage}

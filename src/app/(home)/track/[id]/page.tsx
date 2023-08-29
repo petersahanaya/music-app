@@ -8,6 +8,7 @@ import SongDetail from "./songDetail";
 import { getMusic } from "../../page";
 import { getFavorite } from "@lib/functions/favorite";
 import Footer from "@/components/footer";
+import HeaderPhone from "@/components/sidebar/header";
 
 type Params = {
   params: {
@@ -76,6 +77,8 @@ const Track = async ({ params }: Params) => {
 
   return (
     <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl ">
+      <HeaderPhone />
+
       <SongDetail
         session={session}
         song={song}

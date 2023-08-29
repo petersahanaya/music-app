@@ -1,15 +1,18 @@
 import AlertSign from "@component/alert/signIn";
-import { authOptions } from "@auth/route";
+import HeaderPhone from "@component/sidebar/header";
 import Center from "@component/center";
 import Header from "@component/header";
+import Detail from "@component/detail";
+import Cards from "@component/list/cards";
+
+import { authOptions } from "@auth/route";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
-import { getMusicParams } from "../album/page";
 import { headers } from "next/headers";
+import Link from "next/link";
+
+import { getMusicParams } from "../album/page";
 import { parsedUrl } from "@lib/functions/parsedUrl";
 import { Music } from "@prisma/client";
-import Cards from "@component/list/cards";
-import Detail from "@/components/detail";
 
 const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
   const url = parsedUrl({
@@ -65,6 +68,8 @@ const FavoritePage = async () => {
 
   return (
     <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll  pb-32">
+      <HeaderPhone />
+
       {!listOfFavorite.length && (
         <Center className="flex-col">
           <h4 className="text-3xl text-stone-200 font-[700]">

@@ -59,3 +59,21 @@ export const fadeInAnimate = {
     },
   },
 };
+
+export const fadeLeftAnimate = {
+  hidden: {
+    x: "-100%",
+  },
+  visible: {
+    x: "0%",
+    transition: {
+      duration: 0.3,
+      ease: easings2,
+      delayChildren: 0.2,
+      staggerChildren: 0.2,
+    },
+  },
+  exit: {
+    x: "100%",
+  },
+};

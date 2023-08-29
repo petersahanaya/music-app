@@ -1,19 +1,25 @@
 "use client";
 
 import Profile from "@component/profile";
-import { useToggleAuth, useToggleProfile } from "@state/store/toggleAuth";
 import Button from "@component/button";
+
+import { useToggleAuth, useToggleProfile } from "@state/store/toggleAuth";
+
 import { Session } from "next-auth";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiSearch } from "react-icons/bi";
-import { CiMenuBurger } from "react-icons/ci";
+// import { CiMenuBurger } from "react-icons/ci";
+import BurgerIcon from "@/components/icons/burger";
+import { useSidebar } from "@/state/store/sidebar";
 
 type PathProps = {
   session: Session | null;
 };
 
 const Path = ({ session }: PathProps) => {
+  const onPressedToggleSidebar = useSidebar((state) => state.onPressedToggleSidebar)
   const path = usePathname();
   const onPressedToggleAuth = useToggleAuth(
     (state) => state.onPressedToggleAuth
@@ -70,8 +76,9 @@ const Path = ({ session }: PathProps) => {
             <Link href="/search" className="hidden sm:inline-block">
               <BiSearch size={30} className="text-stone-200 ml-10" />
             </Link>
-            <button className="md:hidden inline-block">
-              <CiMenuBurger size={40} className="text-stone-100" />
+            <button onClick={onPressedToggleSidebar} className="md:hidden inline-block">
+              <BurgerIcon size={50} />
+              {/* <CiMenuBurger size={40} className="text-stone-100" /> */}
             </button>
             <section className="md:flex justify-start items-center gap-3 hidden">
               <Button
@@ -112,8 +119,9 @@ const Path = ({ session }: PathProps) => {
               Popular
             </Link>
 
-            <button className="md:hidden inline-block">
-              <CiMenuBurger size={40} className="text-stone-100" />
+            <button onClick={onPressedToggleSidebar} className="md:hidden inline-block">
+              <BurgerIcon size={50} />
+              {/* <CiMenuBurger size={40} className="text-stone-100" /> */}
             </button>
           </section>
           <div

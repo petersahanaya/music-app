@@ -7,7 +7,7 @@ const ListView = ({ children, className }: ReactClassName) => {
   return (
     <section
       className={twMerge(
-        `w-full grid grid-cols-1 xs:grid-cols-2 xl:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-3  grid-rows-3 xl:grid-rows-2 justify-items-center gap-4 ${className}`
+        `w-full grid grid-cols-2 xs:grid-cols-3 xl:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:grid-cols-3  grid-rows-3 xl:grid-rows-2 justify-items-center gap-4 ${className}`
       )}
     >
       {children}

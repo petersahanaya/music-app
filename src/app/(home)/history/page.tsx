@@ -10,6 +10,7 @@ import Center from "@component/center";
 import Link from "next/link";
 import Detail from "@component/detail";
 import Footer from "@component/footer";
+import HeaderPhone from "@/components/sidebar/header";
 
 const getHistoryMusic = async ({ searchParams }: getMusicParams) => {
   const url = parsedUrl({
@@ -64,6 +65,8 @@ const History = async () => {
 
   return (
     <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl  pb-32">
+      <HeaderPhone />
+
       {!listOfHistoryMusic.length && (
         <Center className="flex-col">
           <h4 className="sm:text-3xl px-3 text-lg text-stone-200 font-[700] ">
@@ -91,7 +94,7 @@ const History = async () => {
         />
       )}
 
-      <Footer/>
+      <Footer />
     </main>
   );
 };

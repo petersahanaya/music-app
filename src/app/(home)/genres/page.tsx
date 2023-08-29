@@ -13,6 +13,7 @@ import { Music } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@auth/route";
 import Link from "next/link";
+import HeaderPhone from "@/components/sidebar/header";
 
 type getMusicOnGenreParams = {
   genre: string;
@@ -98,16 +99,19 @@ const Genres = async ({ params, searchParams }: GenreParams) => {
         }`}
       >
         {!searchParams.genre && (
-          <ListView className="px-3">
-            {listOfGenre.map((genre, idx) => (
-              <GenreCard
-                key={idx}
-                title={genre.title}
-                href={genre.params}
-                className={genre.className[idx]}
-              />
-            ))}
-          </ListView>
+          <>
+
+            <ListView className="px-3">
+              {listOfGenre.map((genre, idx) => (
+                <GenreCard
+                  key={idx}
+                  title={genre.title}
+                  href={genre.params}
+                  className={genre.className[idx]}
+                />
+              ))}
+            </ListView>
+          </>
         )}
 
         {searchParams.genre && listOfMusic.length && (

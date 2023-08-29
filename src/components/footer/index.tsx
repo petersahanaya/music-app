@@ -7,7 +7,7 @@ const Footer = ({ className }: { className?: string }) => {
     <footer
       className={twMerge(`w-full mt-6 pt-8 h-max bg-black p-3 ${className}`)}
     >
-      <article className="w-full grid xs:grid-cols-2 grid-cols-1 justify-items-center">
+      <article className="w-full grid xs:grid-cols-2 grid-cols-1 xs:justify-items-center justify-items-start gap-4 xs:gap-0">
         <section className="flex flex-col items-start gap-3">
           <header className="text-xl font-[700] text-white capitalize mb-1">
             <h3>Company</h3>
@@ -32,7 +32,7 @@ const Footer = ({ className }: { className?: string }) => {
       </article>
 
       <article className="w-full border-t-[1px] border-t-stone-700 mt-8 pt-5 pb-8">
-        <nav className="text-stone-400 cursor-pointer text-sm flex justify-around items-start">
+        <nav className="text-stone-400 cursor-pointer xs:text-sm flex justify-around items-start text-xs">
           <p className="hover:underline">Legal</p>
           <p className="hover:underline">Privacy Center</p>
           <p className="hover:underline">Privacy Policy</p>
