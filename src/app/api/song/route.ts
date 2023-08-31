@@ -115,7 +115,6 @@ export async function GET(req: Request) {
     }
 
     if (type === "search") {
-
       if (!genre) {
         const listOfMusic = await prisma.music.findMany({
           where: {
@@ -213,7 +212,7 @@ export async function GET(req: Request) {
           History: {
             take: Number(take) || 5,
             orderBy: {
-              updatedAt: "asc",
+              updatedAt: "desc",
             },
           },
         },

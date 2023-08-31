@@ -14,6 +14,7 @@ import { TrackType, useAudio } from "@state/store/audio";
 import { trackingMusic } from "@lib/functions/trackingMusic";
 import { useRecentlyPlayed } from "@/state/store/history";
 import { Music } from "@prisma/client";
+import Link from "next/link";
 
 type AudioProps = {
   title: string;
