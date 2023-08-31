@@ -5,7 +5,6 @@ import AlertSign from "@component/alert/signIn";
 import Header from "@component/header";
 import Center from "@component/center";
 
-
 import { getMusicParams } from "../album/page";
 import { parsedUrl } from "@lib/functions/parsedUrl";
 
@@ -25,7 +24,7 @@ const getHistoryMusic = async ({ searchParams }: getMusicParams) => {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      headers: headers(),
+      // headers: headers(),
     });
 
     if (!resp.ok) {

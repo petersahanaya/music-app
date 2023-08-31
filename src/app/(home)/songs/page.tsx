@@ -36,7 +36,7 @@ const getMusic = async ({ take, news, popular }: getMusicParam) => {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      headers: headers(),
+      // headers: headers(),
     });
 
     if (!resp.ok) {

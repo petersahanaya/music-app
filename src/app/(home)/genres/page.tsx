@@ -32,7 +32,7 @@ const getMusicOnGenre = async ({ genre, take }: getMusicOnGenreParams) => {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      headers: headers(),
+      // headers: headers(),
     });
 
     if (!resp.ok) {

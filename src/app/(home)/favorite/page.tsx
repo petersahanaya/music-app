@@ -23,7 +23,7 @@ const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      headers: headers(),
+      // headers: headers(),
     });
 
     if (!resp.ok) {
@@ -36,7 +36,6 @@ const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
 
     return listOfFavorite;
   } catch (e) {
-
     if (e instanceof Error) {
       throw new Error(e.message);
     }
@@ -47,7 +46,7 @@ const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
 
 const FavoritePage = async () => {
   const session = await getServerSession(authOptions);
-  
+
   if (!session || !session.user) {
     return (
       <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll pb-32">
@@ -56,7 +55,7 @@ const FavoritePage = async () => {
       </main>
     );
   }
-  
+
   const listOfFavorite = await getFavoriteMusic({
     searchParams: [
       { key: "favorite", value: "favorite" },

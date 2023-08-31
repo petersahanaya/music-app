@@ -30,7 +30,7 @@ export const getMusic = async ({ take, type }: getMusicParam) => {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      headers: headers(),
+      // headers: headers(),
     });
 
     if (!resp.ok) {
