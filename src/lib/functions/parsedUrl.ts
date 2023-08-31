@@ -7,7 +7,7 @@ type ParsedUrlProps = {
 };
 
 export const parsedUrl = ({ path, searchParams }: ParsedUrlProps): string => {
-  const url = new URL("", "http://localhost:3000");
+  const url = new URL("", "https://p3music.vercel.app");
   url.pathname = path;
 
   let result = url.href;
