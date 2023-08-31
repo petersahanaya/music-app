@@ -3,7 +3,6 @@ import HeaderPhone from "@component/sidebar/header";
 import Center from "@component/center";
 import Header from "@component/header";
 import Detail from "@component/detail";
-import Cards from "@component/list/cards";
 
 import { authOptions } from "@auth/route";
 import { getServerSession } from "next-auth";
@@ -37,7 +36,6 @@ const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
 
     return listOfFavorite;
   } catch (e) {
-    console.log(e);
 
     if (e instanceof Error) {
       throw new Error(e.message);
@@ -48,15 +46,8 @@ const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
 };
 
 const FavoritePage = async () => {
-  const listOfFavorite = await getFavoriteMusic({
-    searchParams: [
-      { key: "favorite", value: "favorite" },
-      { key: "take", value: String(8) },
-    ],
-  });
-
   const session = await getServerSession(authOptions);
-
+  
   if (!session || !session.user) {
     return (
       <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll pb-32">
@@ -65,7 +56,13 @@ const FavoritePage = async () => {
       </main>
     );
   }
-
+  
+  const listOfFavorite = await getFavoriteMusic({
+    searchParams: [
+      { key: "favorite", value: "favorite" },
+      { key: "take", value: String(8) },
+    ],
+  });
   return (
     <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl overflow-y-scroll  pb-32">
       <HeaderPhone />

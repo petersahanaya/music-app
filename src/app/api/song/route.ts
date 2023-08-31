@@ -21,7 +21,6 @@ export async function GET(req: Request) {
 
   const type = searchParams.get("type") as "history" | "like" | "search" | "";
 
-  console.log("GENRE", genre);
   try {
     if (genre && type !== "search") {
       const listOfMusic = await prisma.music.findMany({
@@ -256,8 +255,6 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ listOfMusic });
   } catch (e) {
-    console.log(e);
-
     if (e instanceof Error) {
       return NextResponse.json({ message: e.message }, { status: 400 });
     }
@@ -315,7 +312,6 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json({ message: "Successfully added" });
   } catch (e: any) {
-    console.log(e);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 }

@@ -3,23 +3,24 @@
 import TextField from "@component/textField";
 import Profile from "@component/profile";
 import Button from "@component/button";
+import Center from "@component/center";
+import { FaPlay, FaPause } from "react-icons/fa";
 
 import useDebounce from "@state/hooks/useDebounce";
 import { useToggleProfile } from "@state/store/toggleAuth";
-import { useCallback, useState } from "react";
+import { TrackType, useAudio } from "@state/store/audio";
+import { useRecentlyPlayed } from "@state/store/history";
+import { useAlertUnAuthenticate } from "@state/store/alert";
+
+import { GENRES } from "@lib/validation";
+import { convertUrl, parsedUrl } from "@lib/functions/parsedUrl";
 
 import { Music } from "@prisma/client";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
-import { convertUrl, parsedUrl } from "@lib/functions/parsedUrl";
-import { GENRES } from "@lib/validation";
 import Image from "next/image";
 import Link from "next/link";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { TrackType, useAudio } from "@/state/store/audio";
-import { useRecentlyPlayed } from "@/state/store/history";
-import { useAlertUnAuthenticate } from "@/state/store/alert";
-import Center from "@/components/center";
+import { useCallback, useState } from "react";
 
 type DetailSearchProps = {
   listOfMusic: Music[];
@@ -91,9 +92,7 @@ const DetailSearch = ({ listOfMusic, q, session, g }: DetailSearchProps) => {
         });
 
         const data = await resp.json();
-      } catch (e: unknown) {
-        console.error(e);
-      }
+      } catch (e: unknown) {}
     }
   }, [
     listOfMusic,

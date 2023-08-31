@@ -1,14 +1,16 @@
+import Footer from "@component/footer";
+import HeaderPhone from "@component/sidebar/header";
+
+import { getFavorite } from "@lib/functions/favorite";
 import { parsedUrl } from "@lib/functions/parsedUrl";
 import { getMusicAlbum, getMusicParams } from "../../album/page";
+
 import { headers } from "next/headers";
 import { Music } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@auth/route";
 import SongDetail from "./songDetail";
 import { getMusic } from "../../page";
-import { getFavorite } from "@lib/functions/favorite";
-import Footer from "@/components/footer";
-import HeaderPhone from "@/components/sidebar/header";
 
 type Params = {
   params: {
@@ -47,8 +49,6 @@ const getMusicById = async ({ searchParams }: getMusicParams) => {
 
     return song;
   } catch (e) {
-    console.log(e);
-
     if (e instanceof Error) {
       throw new Error(e.message);
     }

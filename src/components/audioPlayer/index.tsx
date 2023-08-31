@@ -14,7 +14,6 @@ import { TrackType, useAudio } from "@state/store/audio";
 import { trackingMusic } from "@lib/functions/trackingMusic";
 import { useRecentlyPlayed } from "@/state/store/history";
 import { Music } from "@prisma/client";
-import Link from "next/link";
 
 type AudioProps = {
   title: string;
@@ -187,14 +186,7 @@ const AudioPlayer = ({ coverImage, genre, musicUrl, title }: AudioProps) => {
         }
       }
     },
-    [
-      listOfMusic,
-      musicUrl,
-      onPressedChangeAudio,
-      onPressedChangeTrack,
-      state.loop,
-      state.shuffle,
-    ]
+    [listOfMusic, musicUrl, onPressedChangeAudio, onPressedChangeLoadHistory, onPressedChangeTrack, onPressedSortRecentlyPlaying, state.loop, state.shuffle]
   );
 
   const onDragHandleAudio = useCallback((e: ChangeEvent<HTMLInputElement>) => {

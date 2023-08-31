@@ -102,9 +102,7 @@ const SongDetail = ({
       });
 
       const data = await resp.json();
-    } catch (e: unknown) {
-      console.error(e);
-    }
+    } catch (e: unknown) {}
   }, [
     listOfMusic,
     onPressedChangeAudioSrc,
@@ -142,7 +140,7 @@ const SongDetail = ({
 
   return (
     <main className="w-full h-max bg-stone-900  md:rounded-2xl">
-      <section className="w-full xs:h-[300px] h-[200px] relative">
+      <section className="w-full xs:h-[300px] h-[300px] relative">
         <div className="w-full h-full bg-gradient-to-b from-green-600 to-green-600/10 absolute top-0 left-0 rounded-md"></div>
         <section className="absolute bottom-[30px] left-[20px] w-full flex justify-start items-center gap-3">
           <div className="w-[200px] h-[200px] hidden xs:inline-block relative backdrop:shadow-md rounded-md overflow-hidden">
@@ -213,7 +211,7 @@ const SongDetail = ({
         </div>
 
         <section className="w-full px-4">
-          <article className="w-[40%]">
+          <article className="xs:w-[40%] w-[60%]">
             <p className="text-stone-400 leading-7">{lyrics}</p>
           </article>
 

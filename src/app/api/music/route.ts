@@ -9,12 +9,6 @@ import { schema } from "@lib/validation";
 
 export const runtime = "nodejs";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 type TypeFormBody = z.infer<typeof schema>;
 
 type CloudinaryResponse = {

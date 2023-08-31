@@ -1,7 +1,8 @@
 import Detail from "@component/detail";
 
-import { authOptions } from "@auth/route";
 import { parsedUrl } from "@lib/functions/parsedUrl";
+
+import { authOptions } from "@auth/route";
 import { Session, getServerSession } from "next-auth";
 import { headers } from "next/headers";
 import { Music } from "@prisma/client";
@@ -46,8 +47,6 @@ const getMusic = async ({ take, news, popular }: getMusicParam) => {
 
     return listOfMusic;
   } catch (e) {
-    console.log(e);
-
     if (e instanceof Error) {
       throw new Error(e.message);
     }

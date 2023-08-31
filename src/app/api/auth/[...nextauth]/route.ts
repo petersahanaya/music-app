@@ -54,15 +54,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/",
     signOut: "/",
   },
-  secret: "secret",
-  logger: {
-    debug(code, metadata) {
-      console.log("DEBUG", code);
-    },
-    warn(code) {
-      console.log("WARN", code);
-    },
-  },
+  secret: process.env.NEXTAUTH_SECRET as string,
   debug: process.env.NODE_ENV === "development",
 };
 

@@ -13,7 +13,6 @@ import { TrackType, useAudio } from "@state/store/audio";
 import { useRecentlyPlayed } from "@state/store/history";
 import { useCallback } from "react";
 import { Session } from "next-auth";
-import useLoader from "@/state/hooks/useLoader";
 
 type DetailProps = {
   title: string;

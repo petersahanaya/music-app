@@ -159,8 +159,6 @@ const DragAndDropFile = ({
           accept={accept}
           className="hidden"
         />
-        {/* {errorMessage && ( */}
-        {/* )} */}
       </div>
     </>
   );

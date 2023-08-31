@@ -31,7 +31,6 @@ export async function GET(req: Request) {
       },
     });
 
-    console.log({ isFavorite });
 
     if (isFavorite && isFavorite.Favorite.length) {
       return NextResponse.json({ favorite: true });
@@ -54,7 +53,6 @@ export async function PATCH(req: Request) {
   const type = searchParams.get("type") as "like";
   const songId = searchParams.get("songId") as string;
 
-  console.log({ songId });
 
   if (favorite && type === "like") {
     try {
@@ -98,12 +96,11 @@ export async function PATCH(req: Request) {
           },
         });
 
-        console.log({ result });
 
         return NextResponse.json({ message: "updated" });
       }
 
-      const result = await prisma.user.update({
+      await prisma.user.update({
         where: {
           userId: userId as string,
         },
@@ -118,7 +115,6 @@ export async function PATCH(req: Request) {
 
       return NextResponse.json({ message: "updated" });
     } catch (e) {
-      console.error(e);
       return NextResponse.json(
         { message: "Something went wrong.." },
         { status: 500 }

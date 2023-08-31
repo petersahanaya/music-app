@@ -1,16 +1,19 @@
-import { authOptions } from "@auth/route";
+import Footer from "@component/footer";
+import Detail from "@component/detail";
+import HeaderPhone from "@component/sidebar/header";
 import AlertSign from "@component/alert/signIn";
 import Header from "@component/header";
-import { getServerSession } from "next-auth";
+import Center from "@component/center";
+
+
 import { getMusicParams } from "../album/page";
 import { parsedUrl } from "@lib/functions/parsedUrl";
+
+import { getServerSession } from "next-auth";
+import { authOptions } from "@auth/route";
 import { headers } from "next/headers";
 import { Music } from "@prisma/client";
-import Center from "@component/center";
 import Link from "next/link";
-import Detail from "@component/detail";
-import Footer from "@component/footer";
-import HeaderPhone from "@/components/sidebar/header";
 
 const getHistoryMusic = async ({ searchParams }: getMusicParams) => {
   const url = parsedUrl({
@@ -35,8 +38,6 @@ const getHistoryMusic = async ({ searchParams }: getMusicParams) => {
 
     return listOfMusic;
   } catch (e) {
-    console.log(e);
-
     if (e instanceof Error) {
       throw new Error(e.message);
     }
@@ -47,12 +48,6 @@ const getHistoryMusic = async ({ searchParams }: getMusicParams) => {
 
 const History = async () => {
   const session = await getServerSession(authOptions);
-  const listOfHistoryMusic = await getHistoryMusic({
-    searchParams: [
-      { key: "take", value: String(8) },
-      { key: "type", value: "history" },
-    ],
-  });
 
   if (!session || !session.user) {
     return (
@@ -62,6 +57,12 @@ const History = async () => {
       </main>
     );
   }
+  const listOfHistoryMusic = await getHistoryMusic({
+    searchParams: [
+      { key: "take", value: String(8) },
+      { key: "type", value: "history" },
+    ],
+  });
 
   return (
     <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl  pb-32">

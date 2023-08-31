@@ -1,11 +1,13 @@
-import { Music } from "@prisma/client";
-import { headers } from "next/headers";
+import Footer from "@component/footer";
 import Header from "@component/header";
 import MainContent from ".";
+
+import { Music } from "@prisma/client";
+import { headers } from "next/headers";
+
+import { authOptions } from "@auth/route";
 import { parsedUrl } from "@lib/functions/parsedUrl";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@auth/route";
-import Footer from "@component/footer";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
@@ -43,8 +45,6 @@ export const getMusic = async ({ take, type }: getMusicParam) => {
 
     return listOfMusic;
   } catch (e) {
-    console.log(e);
-
     if (e instanceof Error) {
       throw new Error(e.message);
     }

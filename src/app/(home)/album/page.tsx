@@ -1,15 +1,16 @@
 import Center from "@component/center";
-import Link from "next/link";
-import { parsedUrl } from "@lib/functions/parsedUrl";
-import { headers } from "next/headers";
-import { Music } from "@prisma/client";
-import Cards from "@component/list/cards";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@auth/route";
 import AlertSign from "@component/alert/signIn";
 import Detail from "@component/detail";
 import Footer from "@component/footer";
-import HeaderPhone from "@/components/sidebar/header";
+import HeaderPhone from "@component/sidebar/header";
+
+import { parsedUrl } from "@lib/functions/parsedUrl";
+
+import { headers } from "next/headers";
+import { getServerSession } from "next-auth";
+import { Music } from "@prisma/client";
+import { authOptions } from "@auth/route";
+import Link from "next/link";
 
 export type getMusicParams = {
   searchParams: {
@@ -39,8 +40,6 @@ export const getMusicAlbum = async ({ searchParams }: getMusicParams) => {
 
     return listOfAlbum;
   } catch (e) {
-    console.log(e);
-
     if (e instanceof Error) {
       throw new Error(e.message);
     }
