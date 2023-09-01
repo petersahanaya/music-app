@@ -228,7 +228,7 @@ const DetailSearch = ({ listOfMusic, q, session, g }: DetailSearchProps) => {
 
                       <div className="flex flex-col">
                         <Link
-                          href={`/music/${music.id}`}
+                          href={`/track/${music.id}`}
                           className="text-white capitalize text-sm font-[400] hover:underline"
                         >
                           {music.title}
