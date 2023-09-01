@@ -30,11 +30,14 @@ const getMusicByQuery = async ({
     ],
   });
 
+  const header = headers();
+
+
   try {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      // headers: headers(),
+      headers: header,
     });
 
     if (!resp.ok) {
