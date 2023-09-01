@@ -12,7 +12,8 @@ import PostDropDown from "@component/dropdown/post";
 import AudioProvider from "@component/audioPlayer/audioProvider";
 import AlertUnAuthenticated from "@component/alert/unauthenticate";
 import AuthDropDown from "@component/dropdown/auth";
-import PhoneSidebar from "@/components/sidebar/phone";
+import PhoneSidebar from "@component/sidebar/phone";
+import { Metadata } from "next";
 
 export const fetchCache = "force-no-store";
 export const dynamic = "force-dynamic";
@@ -22,6 +23,25 @@ const figtree = Figtree({
   fallback: ["sans-serif"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
+
+export const metadata: Metadata = {
+  title: "P3Music",
+  description: "Discover and listen to a wide range of music on P3Music.",
+  icons: "/favicon.png",
+  keywords: ["music", "streaming", "playlists", "artists", "albums"],
+  authors: {
+    name: "Peter Sahanaya",
+    url: "https://linkedin.com/in/peter-sahanaya",
+  },
+  openGraph: {
+    type: "music.song",
+    url: "https://p3music.vercel.app",
+    title: "P3Music",
+    description: "Discover and listen to a wide range of music on P3Music.",
+    emails: ["petersahanaya09@gmail.com"],
+    images: "/favicon.png",
+  },
+};
 
 export default async function RootLayout({
   children,

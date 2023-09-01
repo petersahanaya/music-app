@@ -12,6 +12,28 @@ import Link from "next/link";
 import { getMusicParams } from "../album/page";
 import { parsedUrl } from "@lib/functions/parsedUrl";
 import { Music } from "@prisma/client";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "My Favorite - P3Music",
+  description: "Favorite and listen to a wide range of music on P3Music.",
+  icons: {
+    icon: "/favicon.png",
+  },
+  keywords: ["music", "streaming", "playlists", "artists", "albums"],
+  authors: {
+    name: "Peter Sahanaya",
+    url: "https://linkedin.com/in/peter-sahanaya",
+  },
+  openGraph: {
+    type: "music.song",
+    url: "https://p3music.vercel.app",
+    title: "My Favorite - P3Music",
+    description: "Favorite and listen to a wide range of music on P3Music.",
+    emails: ["petersahanaya09@gmail.com"],
+    images: ["/favicon.png"],
+  },
+};
 
 const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
   const url = parsedUrl({
@@ -23,7 +45,7 @@ const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      // headers: headers(),
+      headers: headers(),
     });
 
     if (!resp.ok) {

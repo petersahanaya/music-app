@@ -13,10 +13,32 @@ import { Music } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@auth/route";
 import Link from "next/link";
+import { Metadata } from "next";
 
 type getMusicOnGenreParams = {
   genre: string;
   take: number;
+};
+
+export const metadata: Metadata = {
+  title: "Genre - P3Music",
+  description: "Discover and listen to a wide range of music on P3Music.",
+  icons: {
+    icon: "/favicon.png",
+  },
+  keywords: ["music", "streaming", "playlists", "artists", "albums"],
+  authors: {
+    name: "Peter Sahanaya",
+    url: "https://linkedin.com/in/peter-sahanaya",
+  },
+  openGraph: {
+    type: "music.song",
+    url: "https://p3music.vercel.app",
+    title: "Genre - P3Music",
+    description: "Discover and listen to a wide range of music on P3Music.",
+    emails: ["petersahanaya09@gmail.com"],
+    images: ["/favicon.png"],
+  },
 };
 
 const getMusicOnGenre = async ({ genre, take }: getMusicOnGenreParams) => {
@@ -32,7 +54,7 @@ const getMusicOnGenre = async ({ genre, take }: getMusicOnGenreParams) => {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      // headers: headers(),
+      headers: headers(),
     });
 
     if (!resp.ok) {

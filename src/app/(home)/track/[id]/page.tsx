@@ -11,12 +11,45 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@auth/route";
 import SongDetail from "./songDetail";
 import { getMusic } from "../../page";
+import { Metadata, ResolvingMetadata } from "next";
 
 type Params = {
   params: {
     id: string;
   };
 };
+
+export async function generateMetadata(
+  { params }: Params,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const id = params.id;
+
+  const music = await getMusicById({
+    searchParams: [{ key: "songId", value: id }],
+  });
+
+  return {
+    title: music.title,
+    description: music.description,
+    icons: {
+      icon: "/favicon.png",
+    },
+    keywords: ["music", "streaming", "playlists", "artists", "albums"],
+    authors: {
+      name: "Peter Sahanaya",
+      url: "https://linkedin.com/in/peter-sahanaya",
+    },
+    openGraph: {
+      type: "music.song",
+      url: "https://p3music.vercel.app",
+      title: music.title,
+      description: music.description,
+      emails: ["petersahanaya09@gmail.com"],
+      images: ["/favicon.png"],
+    },
+  };
+}
 
 type MusicWithAuthor = {
   author: {
@@ -36,7 +69,7 @@ const getMusicById = async ({ searchParams }: getMusicParams) => {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      // headers: headers(),
+      headers: headers(),
     });
 
     if (!resp.ok) {
