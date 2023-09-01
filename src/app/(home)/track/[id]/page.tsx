@@ -65,12 +65,16 @@ const getMusicById = async ({ searchParams }: getMusicParams) => {
     searchParams,
   });
 
+  const header = headers()
+
   try {
-    const resp = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-      headers: headers(),
-    });
+      const resp = await fetch(url, {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          cookie: header.get("cookie") || "",
+        },
+      });
 
     if (!resp.ok) {
       throw new Error("Error when try to fetch.");

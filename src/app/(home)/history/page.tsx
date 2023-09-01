@@ -42,14 +42,16 @@ const getHistoryMusic = async ({ searchParams }: getMusicParams) => {
     searchParams,
   });
 
-  const header = headers();
+  const header = headers()
 
   try {
-    const resp = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-      headers: header,
-    });
+       const resp = await fetch(url, {
+         method: "GET",
+         cache: "no-store",
+         headers: {
+           cookie: header.get("cookie") || "",
+         },
+       });
 
     if (!resp.ok) {
       throw new Error("Error when try to fetch.");

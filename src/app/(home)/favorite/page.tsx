@@ -43,12 +43,13 @@ const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
 
   const header = headers();
 
-
   try {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      headers: header,
+      headers: {
+        cookie: header.get("cookie") || "",
+      },
     });
 
     if (!resp.ok) {

@@ -40,8 +40,6 @@ export const metadata: Metadata = {
 };
 
 export const getMusic = async ({ take, type }: getMusicParam) => {
-  const header = headers();
-
   const url = parsedUrl({
     path: "api/song",
     searchParams: [
@@ -50,12 +48,16 @@ export const getMusic = async ({ take, type }: getMusicParam) => {
     ],
   });
 
+  const header = headers()
+
   try {
-    const resp = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-      headers: header,
-    });
+     const resp = await fetch(url, {
+       method: "GET",
+       cache: "no-store",
+       headers: {
+         cookie: header.get("cookie") || "",
+       },
+     });
 
     if (!resp.ok) {
       if (type === "history") {

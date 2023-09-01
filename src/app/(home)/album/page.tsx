@@ -6,7 +6,7 @@ import HeaderPhone from "@component/sidebar/header";
 
 import { parsedUrl } from "@lib/functions/parsedUrl";
 
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 import { getServerSession } from "next-auth";
 import { Music } from "@prisma/client";
 import { authOptions } from "@auth/route";
@@ -49,12 +49,13 @@ export const getMusicAlbum = async ({ searchParams }: getMusicParams) => {
 
   const header = headers();
 
-
   try {
     const resp = await fetch(url, {
       method: "GET",
       cache: "no-store",
-      headers: header,
+      headers: {
+        cookie: header.get("cookie") || "",
+      },
     });
 
     if (!resp.ok) {
