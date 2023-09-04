@@ -11,7 +11,7 @@ P3music is a music streaming web application, built with Next Js and other moder
 * Album, favorite and history for the song that we have hear.
 
 ### 🎥 Video Preview 
-![P3Music - Preview](https://github.com/petersahanaya/music-app/assets/114085979/ab461cc4-3097-4bd9-bf4c-b8f71bacdd48)
+https://github.com/petersahanaya/music-app/assets/114085979/ab461cc4-3097-4bd9-bf4c-b8f71bacdd48
 
 ### 🕹️ Technology 
 Next Js · React Js · Node Js · Tailwind Css · Zustand · MongoDB · Git
