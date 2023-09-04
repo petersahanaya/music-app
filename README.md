@@ -1,6 +1,6 @@
 ![Cover Image](https://github.com/petersahanaya/music-app/assets/114085979/d135012e-8cc2-4c13-8954-44a1d7646cce)
 
-### 👕 P3Music - Music Streaming 
+### 🎵 P3Music - Music Streaming 
 P3music is a music streaming web application, built with Next Js and other modern technology. I got this inspiration from Spotify Website.
 
 ### 💡 Features
