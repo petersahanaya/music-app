@@ -4,6 +4,7 @@
 P3music is a music streaming web application, built with Next Js and other modern technology. I got this inspiration from Spotify Website.
 
 ### 💡 Features
+* Support Progressive Web App (can be installed in our pc or phone)
 * User Authentication with Oauth 
 * Browse and search songs based on genre and etc
 * Post song as a creator
