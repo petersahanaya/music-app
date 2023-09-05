@@ -1,5 +1,5 @@
 "use client";
-import { useToggleAuth } from "@state/store/toggleAuth";
+import { useToggleAuth } from "@/state/store/toggleAuth";
 import Button from "@component/button";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";

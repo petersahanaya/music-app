@@ -7,7 +7,7 @@ import Center from "@component/center";
 import { FaPlay, FaPause } from "react-icons/fa";
 
 import useDebounce from "@state/hooks/useDebounce";
-import { useToggleProfile } from "@state/store/toggleAuth";
+import { useToggleProfile } from "@/state/store/toggleAuth";
 import { TrackType, useAudio } from "@state/store/audio";
 import { useRecentlyPlayed } from "@state/store/history";
 import { useAlertUnAuthenticate } from "@state/store/alert";
@@ -155,7 +155,7 @@ const DetailSearch = ({ listOfMusic, q, session, g }: DetailSearchProps) => {
         {!listOfMusic.length && (
           <>
             <Center className="w-full h-screen px-3 ">
-              <h3 className="text-3xl font-[700] text-white">
+              <h3 className="text-3xl font-[700] text-white text-center">
                 Sorry, cannot found what your searching for 🪹
               </h3>
             </Center>

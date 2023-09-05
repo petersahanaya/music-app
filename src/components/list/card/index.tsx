@@ -1,17 +1,12 @@
 "use client";
 
+import FloatingButton from "@component/button/floating";
+
 import { Music } from "@prisma/client";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
-import { TrackType, useAudio } from "@state/store/audio";
-import { useAlertUnAuthenticate } from "@state/store/alert";
-import { useSession } from "next-auth/react";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { parsedUrl } from "@lib/functions/parsedUrl";
-import { MouseEvent, useCallback } from "react";
-import { useRecentlyPlayed } from "@state/store/history";
+import { MouseEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useLoaderUI } from "@state/store/loading";
 
 type CardProps = {
   music: Music;
@@ -20,77 +15,7 @@ type CardProps = {
 };
 
 const Card = ({ listOfMusic, music, className }: CardProps) => {
-  const onPressedChangeTrack = useAudio((state) => state.onPressedChangeTrack);
-
   const router = useRouter();
-
-  const onPressedSortPlaying = useRecentlyPlayed(
-    (state) => state.onPressedSortPlaying
-  );
-
-  const onPressedChangeLoadHistory = useRecentlyPlayed(
-    (state) => state.onLoadSetHistoryMusic
-  );
-
-  const onPressedChangeAudioSrc = useAudio(
-    (state) => state.onPressedChangedAudioSrc
-  );
-
-  const track = useAudio((state) => state.audioSrc);
-
-  const onPressedAlertUnAuthenticate = useAlertUnAuthenticate(
-    (state) => state.onPressedChangeAlertUnauthenticate
-  );
-
-  const { data: session } = useSession();
-
-  const onPressedSetAudio = useCallback(async () => {
-    if (!session || !session.user) {
-      onPressedAlertUnAuthenticate(music.coverImage);
-    } else {
-      onPressedChangeAudioSrc(music);
-
-      onPressedChangeTrack({
-        currentAudioSrc: music.musicUrl,
-        listOfMusic,
-        type: TrackType.Default,
-      });
-
-      onPressedChangeLoadHistory(
-        [
-          music,
-          ...listOfMusic.filter((musicc) => musicc.id !== music.id).slice(0, 4),
-        ].slice(0, 4)
-      );
-
-      onPressedSortPlaying(music);
-
-      const url = parsedUrl({
-        path: "api/song",
-        searchParams: [{ key: "songId", value: music.id }],
-      });
-
-      try {
-        const resp = await fetch(url, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-        });
-
-        const data = await resp.json();
-      } catch (e: unknown) {
-        console.error(e);
-      }
-    }
-  }, [
-    listOfMusic,
-    music,
-    onPressedAlertUnAuthenticate,
-    onPressedChangeAudioSrc,
-    onPressedChangeLoadHistory,
-    onPressedChangeTrack,
-    onPressedSortPlaying,
-    session,
-  ]);
 
   const onPressedRedirectToTrack = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
@@ -113,22 +38,8 @@ const Card = ({ listOfMusic, music, className }: CardProps) => {
             alt={music.title}
             fill
           />
-          <div
-            style={{
-              transform:
-                track?.musicUrl === music.musicUrl ? "translateY(0px)" : "",
-            }}
-            onClick={onPressedSetAudio}
-            className={`absolute bottom-[10px] right-[10px] w-max opacity-0 translate-y-8 group-hover:opacity-100 group-hover:translate-y-0 h-max p-4 rounded-full bg-green-500 hover:bg-green-600 ${
-              track?.musicUrl === music.musicUrl && "translate-y-0 opacity-100"
-            } text-stone-950 transition-all`}
-          >
-            {track?.musicUrl === music.musicUrl ? (
-              <FaPause size={25} />
-            ) : (
-              <FaPlay size={25} />
-            )}
-          </div>
+
+          <FloatingButton music={music} listOfMusic={listOfMusic} />
         </div>
 
         <section className="w-full flex flex-col justify-start items-start gap-2">

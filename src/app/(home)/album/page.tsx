@@ -3,76 +3,16 @@ import AlertSign from "@component/alert/signIn";
 import Detail from "@component/detail";
 import Footer from "@component/footer";
 import HeaderPhone from "@component/sidebar/header";
-
-import { parsedUrl } from "@lib/functions/parsedUrl";
-
-import { headers, cookies } from "next/headers";
-import { getServerSession } from "next-auth";
-import { Music } from "@prisma/client";
-import { authOptions } from "@auth/route";
 import Link from "next/link";
+
+import { authOptions } from "@auth/route";
+import { getServerSession } from "next-auth";
 import { Metadata } from "next";
 
-export type getMusicParams = {
-  searchParams: {
-    key: string;
-    value: string;
-  }[];
-};
+import { getMusicAlbum } from "@lib/api/getAlbum";
+import { albumMetaData } from "@lib/metadata";
 
-export const metadata: Metadata = {
-  title: "My Album - P3Music",
-  description: "Album and listen to a wide range of music on P3Music.",
-  icons: {
-    icon: "/favicon.png",
-  },
-  keywords: ["music", "streaming", "playlists", "artists", "albums"],
-  authors: {
-    name: "Peter Sahanaya",
-    url: "https://linkedin.com/in/peter-sahanaya",
-  },
-  openGraph: {
-    type: "music.song",
-    url: "https://p3music.vercel.app",
-    title: "Album - P3Music",
-    description: "Album and listen to a wide range of music on P3Music.",
-    emails: ["petersahanaya09@gmail.com"],
-    images: ["/favicon.png"],
-  },
-};
-
-export const getMusicAlbum = async ({ searchParams }: getMusicParams) => {
-  const url = parsedUrl({
-    path: "api/song",
-    searchParams,
-  });
-
-  const header = headers();
-
-  try {
-    const resp = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-      headers: {
-        cookie: header.get("cookie") || "",
-      },
-    });
-
-    if (!resp.ok) {
-      throw new Error("Error when try to fetch.");
-    }
-
-    const { listOfAlbum } = (await resp.json()) as { listOfAlbum: Music[] };
-
-    return listOfAlbum;
-  } catch (e) {
-    if (e instanceof Error) {
-      throw new Error(e.message);
-    }
-
-    throw new Error("Something went wrong");
-  }
-};
+export const metadata: Metadata = albumMetaData
 
 const Album = async () => {
   const session = await getServerSession(authOptions);

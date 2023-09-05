@@ -1,16 +1,14 @@
 import Footer from "@component/footer";
 import HeaderPhone from "@component/sidebar/header";
+import SongDetail from "./songDetail";
 
 import { getFavorite } from "@lib/functions/favorite";
-import { parsedUrl } from "@lib/functions/parsedUrl";
-import { getMusicAlbum, getMusicParams } from "../../album/page";
+import { getMusicAlbum } from "@lib/api/getAlbum";
+import { getMusicById } from "@lib/api/getMusicById";
+import { getMusic } from "@lib/api/getMusic";
 
-import { headers } from "next/headers";
-import { Music } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@auth/route";
-import SongDetail from "./songDetail";
-import { getMusic } from "../../page";
 import { Metadata, ResolvingMetadata } from "next";
 
 type Params = {
@@ -50,49 +48,6 @@ export async function generateMetadata(
     },
   };
 }
-
-type MusicWithAuthor = {
-  author: {
-    profile: string;
-    username: string;
-    userId: string;
-  };
-} & Music;
-
-const getMusicById = async ({ searchParams }: getMusicParams) => {
-  const url = parsedUrl({
-    path: "api/song",
-    searchParams,
-  });
-
-  const header = headers()
-
-  try {
-      const resp = await fetch(url, {
-        method: "GET",
-        cache: "no-store",
-        headers: {
-          cookie: header.get("cookie") || "",
-        },
-      });
-
-    if (!resp.ok) {
-      throw new Error("Error when try to fetch.");
-    }
-
-    const { song } = (await resp.json()) as {
-      song: MusicWithAuthor;
-    };
-
-    return song;
-  } catch (e) {
-    if (e instanceof Error) {
-      throw new Error(e.message);
-    }
-
-    throw new Error("Something went wrong");
-  }
-};
 
 const Track = async ({ params }: Params) => {
   const session = await getServerSession(authOptions);

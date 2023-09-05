@@ -62,7 +62,7 @@ const PhoneSidebar = ({ session }: PhoneSidebarProps) => {
                   key={idx}
                 >
                   <Link href={path}>
-                    <h3 className="capitalize text-4xl font-[700]">
+                    <h3 className="capitalize text-5xl font-[700]">
                       {path === "/" ? "Home" : path.split("/")[1]}
                     </h3>
                   </Link>

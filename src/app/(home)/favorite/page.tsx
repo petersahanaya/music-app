@@ -6,69 +6,13 @@ import Detail from "@component/detail";
 
 import { authOptions } from "@auth/route";
 import { getServerSession } from "next-auth";
-import { headers } from "next/headers";
 import Link from "next/link";
 
-import { getMusicParams } from "../album/page";
-import { parsedUrl } from "@lib/functions/parsedUrl";
-import { Music } from "@prisma/client";
 import { Metadata } from "next";
+import { getFavoriteMusic } from "@lib/api/getFavorite";
+import { favoriteMetaData } from "@lib/metadata";
 
-export const metadata: Metadata = {
-  title: "My Favorite - P3Music",
-  description: "Favorite and listen to a wide range of music on P3Music.",
-  icons: {
-    icon: "/favicon.png",
-  },
-  keywords: ["music", "streaming", "playlists", "artists", "albums"],
-  authors: {
-    name: "Peter Sahanaya",
-    url: "https://linkedin.com/in/peter-sahanaya",
-  },
-  openGraph: {
-    type: "music.song",
-    url: "https://p3music.vercel.app",
-    title: "My Favorite - P3Music",
-    description: "Favorite and listen to a wide range of music on P3Music.",
-    emails: ["petersahanaya09@gmail.com"],
-    images: ["/favicon.png"],
-  },
-};
-
-const getFavoriteMusic = async ({ searchParams }: getMusicParams) => {
-  const url = parsedUrl({
-    path: `api/song`,
-    searchParams,
-  });
-
-  const header = headers();
-
-  try {
-    const resp = await fetch(url, {
-      method: "GET",
-      cache: "no-store",
-      headers: {
-        cookie: header.get("cookie") || "",
-      },
-    });
-
-    if (!resp.ok) {
-      throw new Error("Error when try to fetch.");
-    }
-
-    const { listOfFavorite } = (await resp.json()) as {
-      listOfFavorite: Music[];
-    };
-
-    return listOfFavorite;
-  } catch (e) {
-    if (e instanceof Error) {
-      throw new Error(e.message);
-    }
-
-    throw new Error("Something went wrong");
-  }
-};
+export const metadata: Metadata = favoriteMetaData
 
 const FavoritePage = async () => {
   const session = await getServerSession(authOptions);

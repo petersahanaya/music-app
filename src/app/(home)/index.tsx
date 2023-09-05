@@ -3,7 +3,6 @@
 import { Music } from "@prisma/client";
 import Cards from "@component/list/cards";
 import { Session } from "next-auth";
-import Footer from "@/components/footer";
 
 type MainContentProps = {
   listOfMusic: Music[];

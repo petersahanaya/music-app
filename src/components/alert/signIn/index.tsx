@@ -1,6 +1,6 @@
 "use client";
 
-import { useToggleAuth } from "@state/store/toggleAuth";
+import { useToggleAuth } from "@/state/store/toggleAuth";
 import Button from "@component/button";
 import Center from "@component/center";
 

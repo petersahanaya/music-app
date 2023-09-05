@@ -1,4 +1,4 @@
-import { PickMusic } from "@/state/store/audio";
+import { PickMusic } from "@state/store/audio";
 import { Music } from "@prisma/client";
 
 export const trackingMusic = (

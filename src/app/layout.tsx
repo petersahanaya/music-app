@@ -41,6 +41,16 @@ export const metadata: Metadata = {
     emails: ["petersahanaya09@gmail.com"],
     images: "/favicon.png",
   },
+  appleWebApp: {
+    statusBarStyle: "black-translucent",
+    capable: true,
+  },
+  viewport: {
+    initialScale: 1,
+    viewportFit: "cover",
+    userScalable: false,
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default async function RootLayout({
@@ -55,7 +65,10 @@ export default async function RootLayout({
       <body className={figtree.className}>
         <SessionProvider>
           <AlertUnAuthenticated />
-          <main className="w-screen h-screen flex flex-col md:flex-row items-center justify-between md:pt-2 ">
+          <main
+            style={{ WebkitTapHighlightColor: "transparent" }}
+            className="w-screen h-screen flex flex-col md:flex-row items-center justify-between md:pt-2 "
+          >
             <Sidebar />
             <AuthDropDown />
             <PhoneSidebar session={session} />
@@ -71,5 +84,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
-//pb-32

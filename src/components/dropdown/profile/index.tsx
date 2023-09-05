@@ -3,7 +3,7 @@
 import ListTile from "@component/listTile";
 import { SessionProps } from "@/types/types";
 import Profile from "@component/profile";
-import { useToggleProfile } from "@state/store/toggleAuth";
+import { useToggleProfile } from "@/state/store/toggleAuth";
 import { AnimatePresence, motion } from "framer-motion";
 import { GrFormClose } from "react-icons/gr";
 import { PiSignpostLight } from "react-icons/pi";

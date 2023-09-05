@@ -3,7 +3,7 @@
 import Profile from "@component/profile";
 import Button from "@component/button";
 
-import { useToggleAuth, useToggleProfile } from "@state/store/toggleAuth";
+import { useToggleAuth, useToggleProfile } from "@/state/store/toggleAuth";
 
 import { Session } from "next-auth";
 
@@ -19,7 +19,9 @@ type PathProps = {
 };
 
 const Path = ({ session }: PathProps) => {
-  const onPressedToggleSidebar = useSidebar((state) => state.onPressedToggleSidebar)
+  const onPressedToggleSidebar = useSidebar(
+    (state) => state.onPressedToggleSidebar
+  );
   const path = usePathname();
   const onPressedToggleAuth = useToggleAuth(
     (state) => state.onPressedToggleAuth
@@ -76,7 +78,10 @@ const Path = ({ session }: PathProps) => {
             <Link href="/search" className="hidden sm:inline-block">
               <BiSearch size={30} className="text-stone-200 ml-10" />
             </Link>
-            <button onClick={onPressedToggleSidebar} className="md:hidden inline-block">
+            <button
+              onClick={onPressedToggleSidebar}
+              className="md:hidden inline-block"
+            >
               <BurgerIcon size={50} />
               {/* <CiMenuBurger size={40} className="text-stone-100" /> */}
             </button>
@@ -119,7 +124,10 @@ const Path = ({ session }: PathProps) => {
               Popular
             </Link>
 
-            <button onClick={onPressedToggleSidebar} className="md:hidden inline-block">
+            <button
+              onClick={onPressedToggleSidebar}
+              className="md:hidden inline-block"
+            >
               <BurgerIcon size={50} />
               {/* <CiMenuBurger size={40} className="text-stone-100" /> */}
             </button>

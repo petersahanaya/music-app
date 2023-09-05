@@ -70,7 +70,7 @@ export const fadeLeftAnimate = {
       duration: 0.3,
       ease: easings2,
       delayChildren: 0.2,
-      staggerChildren: 0.2,
+      staggerChildren: 0.1,
     },
   },
   exit: {

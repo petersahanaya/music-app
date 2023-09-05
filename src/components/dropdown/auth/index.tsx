@@ -1,6 +1,6 @@
 "use client";
 
-import { useToggleAuth } from "@state/store/toggleAuth";
+import { useToggleAuth } from "@/state/store/toggleAuth";
 import { SiFacebook } from "react-icons/si";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";

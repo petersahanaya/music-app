@@ -7,75 +7,14 @@ import Center from "@component/center";
 import Footer from "@component/footer";
 
 import { ACCEPTED_GENRE } from "@lib/validation";
-import { parsedUrl } from "@lib/functions/parsedUrl";
-import { headers } from "next/headers";
-import { Music } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@auth/route";
 import Link from "next/link";
 import { Metadata } from "next";
+import { genreMetaData } from "@lib/metadata";
+import { getMusicGenre } from "@lib/api/getGenre";
 
-type getMusicOnGenreParams = {
-  genre: string;
-  take: number;
-};
-
-export const metadata: Metadata = {
-  title: "Genre - P3Music",
-  description: "Discover and listen to a wide range of music on P3Music.",
-  icons: {
-    icon: "/favicon.png",
-  },
-  keywords: ["music", "streaming", "playlists", "artists", "albums"],
-  authors: {
-    name: "Peter Sahanaya",
-    url: "https://linkedin.com/in/peter-sahanaya",
-  },
-  openGraph: {
-    type: "music.song",
-    url: "https://p3music.vercel.app",
-    title: "Genre - P3Music",
-    description: "Discover and listen to a wide range of music on P3Music.",
-    emails: ["petersahanaya09@gmail.com"],
-    images: ["/favicon.png"],
-  },
-};
-
-const getMusicOnGenre = async ({ genre, take }: getMusicOnGenreParams) => {
-  const url = parsedUrl({
-    path: "api/song",
-    searchParams: [
-      { key: "genre", value: genre },
-      { key: "take", value: String(take) },
-    ],
-  });
-
-  const header = headers()
-
-  try {
-       const resp = await fetch(url, {
-         method: "GET",
-         cache: "no-store",
-         headers: {
-           cookie: header.get("cookie") || "",
-         },
-       });
-
-    if (!resp.ok) {
-      throw new Error("Error when try to fetch.");
-    }
-
-    const { listOfMusic } = (await resp.json()) as { listOfMusic: Music[] };
-
-    return listOfMusic;
-  } catch (e) {
-    if (e instanceof Error) {
-      throw new Error(e.message);
-    }
-
-    throw new Error("Something went wrong");
-  }
-};
+export const metadata: Metadata = genreMetaData;
 
 const listOfGenre = ACCEPTED_GENRE.map((genre) => ({
   title: genre,
@@ -107,7 +46,7 @@ const Genres = async ({ params, searchParams }: GenreParams) => {
     );
   }
 
-  const listOfMusic = await getMusicOnGenre({
+  const listOfMusic = await getMusicGenre({
     genre: searchParams.genre || "",
     take: 20,
   });

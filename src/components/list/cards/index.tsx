@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import Card from "../card";
 import Link from "next/link";
 import ListView from "@component/listView";
-import RecentlyPlay from "@/components/recentlyPlay";
+import RecentlyPlay from "@component/recentlyPlay";
 
 type CardsProps = {
   listOfMusic: Music[];
