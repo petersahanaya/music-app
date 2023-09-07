@@ -1,5 +1,6 @@
 import Footer from "@component/footer";
 import HeaderPhone from "@component/sidebar/header";
+import AlertSign from "@component/alert/signIn";
 import SongDetail from "./songDetail";
 
 import { getFavorite } from "@lib/functions/favorite";
@@ -51,6 +52,14 @@ export async function generateMetadata(
 
 const Track = async ({ params }: Params) => {
   const session = await getServerSession(authOptions);
+
+  if (!session || !session.user) {
+    return (
+      <main className="md:w-[80%] w-full h-full bg-stone-900 md:rounded-2xl ">
+        <AlertSign />
+      </main>
+    );
+  }
 
   const [listOfAlsoLike, listOfAlbum, song] = await Promise.all([
     getMusic({ take: 4, type: "" }),
